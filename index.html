@@ -1,211 +1,251 @@
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Yongjun Choi</title>
-    <meta name="author" content="Yongjun Choi" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yongjun Choi">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- TODO: 파비콘 교체 -->
-    <link rel="shortcut icon" href="images/favicon/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" href="stylesheet.css" />
+    <link rel="shortcut icon" href="images/favicon/favicon.ico" type="image/x-icon">
+    <!-- 템플릿 CSS가 있으면 유지, 없으면 아래 style 블록 사용 -->
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
     <style>
-      /* 최소한의 보완 (이미 템플릿 CSS가 있다면 이 블록은 삭제 가능) */
-      body { -webkit-font-smoothing: antialiased; }
+      /* 템플릿 CSS가 이미 있다면 이 style 블록은 삭제해도 됩니다 */
+      body { -webkit-font-smoothing: antialiased; margin: 0; }
+      h2 { margin: 24px 0 8px; }
       .name { font-size: 32px; font-weight: 700; }
-      .papertitle { font-weight: 600; font-size: 16px; }
-      .tagline { color: #666; font-size: 14px; margin-top: -8px; text-align: center; }
-      .pill { padding: 2px 8px; border-radius: 999px; border: 1px solid #ddd; font-size: 12px; }
-      img.round { border-radius: 50%; }
-      ul.compact { margin: 6px 0 0 16px; }
+      .muted { color:#666; }
+      .pill { padding: 2px 8px; border-radius: 999px; border:1px solid #ddd; font-size:12px; }
+      ul { margin-top: 6px; }
       ul.compact li { margin: 2px 0; }
+      img.round { border-radius: 50%; }
+      a { text-decoration: none; }
+      table { border-collapse: separate; }
     </style>
   </head>
 
   <body>
-    <table style="width:100%;max-width:800px;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
+    <table style="width:100%;max-width:900px;border:0;border-spacing:0;margin:0 auto;">
       <tbody>
         <tr>
           <td style="padding:0;">
-            <!-- Header / Profile -->
-            <table style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
+
+            <!-- Header -->
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
               <tbody>
                 <tr>
-                  <td style="padding:2.5%;width:63%;vertical-align:middle;">
+                  <td style="padding:2.5%;width:65%;vertical-align:middle;">
                     <p class="name" style="text-align:center;">Yongjun Choi</p>
-                    <p class="tagline">Event-based Vision · Depth Estimation · Multi-sensor Fusion</p>
-
-                    <p>
-                      I am a master's student in the
-                      <a href="https://vision.unist.ac.kr/" target="_blank">3D Vision & Robotics Lab</a> at UNIST,
-                      advised by Prof. <a href="https://unist.info/?page_id=194" target="_blank">Kyungdon Joo</a>.
+                    <p style="text-align:center" class="muted">
+                      60 Harbord St, Toronto, ON M5S 3L1
                     </p>
-                    <p>
-                      My research focuses on event-based vision, depth estimation, and robust perception for autonomous driving and robotics.
-                      I also explore diffusion-based image editing for human head/hair manipulation in the wild.
-                    </p>
+                        <p>
+                          Hello! I am a master's student in the 
+                          <a href="https://unist.info/" target="_blank">3D Vision &amp; Robotics Lab</a> at UNIST, 
+                          advised by Prof. <a href="https://unist.info/?page_id=194" target="_blank">Kyungdon Joo</a>.<br><br>
 
+                          I was a visiting student in the CARTE, MIE, at the University of Toronto 
+                          through the AI Convergence Program, supported by the IITP, Korean Government.<br><br>
+
+                          My research focuses on 
+                          <strong>3D scene understanding</strong>, 
+                          <strong>generative model</strong>, 
+                          <strong>video understanding</strong>, 
+                          and <strong>visual–language modeling</strong>.
+                        </p>
                     <p>
-                      <!-- TODO: 이메일 주소 교체 -->
-                      Contact: <span class="pill">yongjun[at]email[dot]com</span>
+                      Contact:
+                      <a href="mailto:ccyjun123@unist.ac.kr" class="pill">ccyjun123@unist.ac.kr</a>
                     </p>
 
                     <p style="text-align:center">
-                      <!-- TODO: 링크 교체 -->
+                      <!-- TODO: 본인 링크로 교체 -->
                       <a href="data/CV_Yongjun.pdf" target="_blank">CV</a> &nbsp;/&nbsp;
-                      <a href="https://www.linkedin.com/in/" target="_blank">LinkedIn</a> &nbsp;/&nbsp;
-                      <a href="https://github.com/" target="_blank">GitHub</a> &nbsp;/&nbsp;
-                      <a href="https://scholar.google.com/" target="_blank">Google Scholar</a>
+                      <a href="https://www.linkedin.com/in/yongjun-choi-b84546279/" target="_blank">LinkedIn</a> &nbsp;/&nbsp;
+                      <a href="https://github.com/beautifulchoi" target="_blank">GitHub</a>
                     </p>
                   </td>
-
-                  <td style="padding:2.5%;width:40%;max-width:40%;">
+                  <td style="padding:2.5%;width:35%;max-width:35%;">
                     <!-- TODO: 프로필 이미지 교체 -->
                     <a href="images/profile.jpg">
-                      <img src="images/profile.jpg" alt="profile photo" style="width:100%;max-width:100%;object-fit:cover;" class="round" />
+                      <img src="images/profile.jpg" alt="profile photo" style="width:100%;max-width:100%;object-fit:cover;" class="round">
                     </a>
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            <!-- Publications (있으면 채우고, 없으면 섹션 숨겨도 됨) -->
-            <table style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
+            <!-- Projects (핵심만 정리) -->
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
               <tbody>
                 <tr>
-                  <td style="padding:20px;width:100%;vertical-align:middle;">
-                    <h2>Selected Publications</h2>
-                    <p style="margin-top:-8px;color:#666;">(* indicates equal contribution)</p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <table style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
-              <tbody>
-                <!-- 예시 1: 진행 중 또는 공개 전인 경우 -->
-                <tr>
-                  <td style="padding:20px;width:25%;vertical-align:middle;">
-                    <!-- TODO: 썸네일 교체 -->
-                    <img src="images/pub_anybald.png" width="180" alt="paper thumbnail" />
-                  </td>
-                  <td style="padding:20px;width:75%;vertical-align:top;padding-left:20px;">
-                    <span class="papertitle">Mask-free Diffusion for Hair Removal in the Wild</span><br />
-                    <strong>Yongjun Choi</strong>, Collaborators<br />
-                    <em>Under Review</em>, 2025<br />
-                    [ <a href="#" target="_blank">Project</a> | <a href="#" target="_blank">Paper</a> | <a href="#" target="_blank">Code</a> ]
-                    <ul class="compact">
-                      <li>Proposes a mask-free framework and learnable prompts for natural hair removal under occlusions.</li>
-                      <li>Demonstrates robust identity preservation and improved in-the-wild generalization.</li>
-                    </ul>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <!-- Projects -->
-            <table style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
-              <tbody>
-                <tr>
-                  <td style="padding:20px;width:100%;vertical-align:middle;">
+                  <td style="padding:20px;width:100%;vertical-align:middle">
                     <h2>Projects</h2>
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            <table style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
               <tbody>
-                <!-- Project 1: Event+RGB Depth -->
+                <!-- Project 1 -->
                 <tr>
                   <td style="padding:20px;width:25%;vertical-align:middle;">
                     <!-- TODO: 썸네일 교체 -->
-                    <img src="images/proj_event_depth.png" width="180" alt="event depth project" />
+                    <img src="images/lang_grouping.PNG" width="300" alt="lang feature + 3dgs">
                   </td>
                   <td style="padding:20px;width:75%;vertical-align:top;padding-left:20px;">
-                    <span class="papertitle">Depth Estimation from RGB & Event Streams</span><br />
-                    <em>Master's Thesis Project</em> · 2024–Present<br />
-                    [ <a href="#" target="_blank">Code</a> | <a href="#" target="_blank">Slides</a> ]
+                    <span style="font-weight:600;">Lang-Grouping: Object-centric grouping for a better understanding of 3D scenes</span><br>
+                    <em>3D vision course final project</em> &nbsp;·&nbsp; 2024.04 – 2024.06
                     <ul class="compact">
-                      <li>Fuses asynchronous events with RGB to improve depth in high-speed, low-light scenes.</li>
-                      <li>Employs LSTM/GRU temporal encoding and gradient/normal consistency losses.</li>
+                      <li>Developed an object-level language–3D scene alignment framework that halves inference time while preserving quality.</li>
+                      <li>Introduced object-centric contrastive learning to improve multi-view consistency for language-guided scene manipulation.</li>
                     </ul>
                   </td>
                 </tr>
 
-                <!-- Project 2: Kalman-inspired Fusion -->
+                <!-- Project 2 -->
                 <tr>
                   <td style="padding:20px;width:25%;vertical-align:middle;">
-                    <img src="images/proj_kalman_fusion.png" width="180" alt="kalman fusion" />
+                    <img src="images/anycall_fig.jpg" width="300" alt="practical video anomaly detection system in mobile devices">
                   </td>
                   <td style="padding:20px;width:75%;vertical-align:top;padding-left:20px;">
-                    <span class="papertitle">Kalman-inspired Multi-sensor Fusion for Occupancy Prediction</span><br />
-                    <em>Research Project</em> · 2024<br />
-                    [ <a href="#" target="_blank">Code</a> ]
+                    <span style="font-weight:600;">AnyCall: Video-Based Anomaly Detection for Industrial Display Device Inspection Using Context Alignment and Localizing Differences</span><br>
+                    <em>Research project, On-going</em> &nbsp;·&nbsp; 2024
                     <ul class="compact">
-                      <li>Activates sub-networks by motion direction and fuses IMU filters with multi-covariance vectors.</li>
-                      <li>Addresses blind spots by cross-compensating sensors.</li>
+                      <li>Developed a video-based anomaly detection system for industrial display inspection, capable of identifying defects during long-term multi-device operation.</li>
+                      <li>Introduced a disparity synchronization module for frame-level alignment and a difference explorer module for robust, noise-resistant anomaly detection.</li>
                     </ul>
                   </td>
                 </tr>
 
-                <!-- Project 3: AnyBald / Diffusion -->
+                <!-- Project 3 -->
                 <tr>
                   <td style="padding:20px;width:25%;vertical-align:middle;">
-                    <img src="images/proj_anybald.png" width="180" alt="anybald" />
+                    <img src="images/gomoku.png" width="300" alt="Gomoku AI">
                   </td>
                   <td style="padding:20px;width:75%;vertical-align:top;padding-left:20px;">
-                    <span class="papertitle">AnyBald: Diffusion-based Hair Removal</span><br />
-                    <em>Research Project</em> · 2025<br />
-                    [ <a href="#" target="_blank">Project</a> | <a href="#" target="_blank">Paper</a> | <a href="#" target="_blank">Code</a> ]
+                    <span style="font-weight:600;">Gomoku AI: Demonstrating a Vision-Based AI Robot for Strategic Board Games</span><br>
+                    <em>HRI course final project, Under review</em> &nbsp;·&nbsp; 2024
                     <ul class="compact">
-                      <li>Builds a bald proxy dataset and task-specific prompts to disentangle hair semantics.</li>
-                      <li>Improves downstream hair transfer and 3D head reconstruction.</li>
+                      <li>Developed a low-cost human–robot interaction system for playing Gomoku, integrating real-time vision, AI-based decision-making, and robotic arm control.</li>
+                      <li>Offers an affordable, real-world gaming experience that merges physical gameplay with intelligent decision-making.</li>
                     </ul>
                   </td>
                 </tr>
 
-                <!-- Project 4: 3D Animal Reconstruction -->
+                <!-- Project 4 (옵션: 진행 중 논문성 프로젝트) -->
                 <tr>
                   <td style="padding:20px;width:25%;vertical-align:middle;">
-                    <img src="images/proj_animal3d.png" width="180" alt="3d animal reconstruction" />
+                    <img src="images/anybald_fig.jpg" width="300" alt="Diffusion-based Hair Removal">
                   </td>
                   <td style="padding:20px;width:75%;vertical-align:top;padding-left:20px;">
-                    <span class="papertitle">Low-cost 3D Animal Reconstruction</span><br />
-                    <em>Startup Concept</em> · 2025<br />
-                    [ <a href="#" target="_blank">Pitch</a> ]
+                    <span style="font-weight:600;">AnyBald: Toward Realistic Diffusion-Based Hair Removal In-The-Wild</span><br>
+                    <em>Research project, Under review</em> &nbsp;·&nbsp; 2025
                     <ul class="compact">
-                      <li>Photo/video-only pipeline for 3D pet models; targets pet figurines, vet tools, and AR content.</li>
-                      <li>Focus on data efficiency and consumer-grade capture.</li>
+                      <li>Developed AnyBald, a mask-free diffusion-based framework for realistic hair removal in the wild.</li>
+                      <li>Achieves natural bald image generation while preserving facial identity, enabling robust performance across diverse real-world scenarios.</li>
                     </ul>
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            <!-- Awards -->
-            <table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+            <!-- Experience -->
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
               <tbody>
                 <tr>
-                  <td>
-                    <h2>Awards & Honors</h2>
-                    <ul class="compact">
-                      <!-- TODO: 수상 내역 있으면 추가 -->
-                      <li>Honorable Mention, User Study (Hair Editing), 2025</li>
+                  <td style="padding:20px;width:100%;vertical-align:middle">
+                    <h2>Experience</h2>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
+              <tbody>
+                <tr>
+                  <td style="padding:10px 20px;">
+                    <ul>
+                      <li><strong>Research Assistant</strong>, 3D Vision &amp; Robotics Lab, UNIST (Mar 2024 – Aug 2026)<br>
+                        Video/3D scene understanding, visual–language modeling; industrial project with Samsung Electronics (Confidential).
+                      </li>
+                      <li><strong>Visiting Student</strong>, University of Toronto (Jan 2025 – Jun 2025)<br>
+                        AI Convergence Program; Special MEng student at MIE; industrial project with Modiface (Confidential).
+                      </li>
+                      <li><strong>Teaching Assistant</strong>, UNIST<br>
+                        AI Programming 2 (Sep 2024 – Dec 2024); Kyungnam Novatus Academia (Jul 2024)
+                      </li>
+                      <li><strong>Intern</strong>, Upsight (Jun 2023 – Aug 2023)<br>
+                        Built a building crack detection model integrated into diagnostic processes.
+                      </li>
+                      <li><strong>Undergraduate Intern</strong>, Computer Vision Lab, University of Seoul (Apr 2022 – Jul 2023)<br>
+                        ViT/CAM, AI-based plant feature extractor; urban forest management mobile platform; prepared a patent on gallery-based patchwork album generation.
+                      </li>
                     </ul>
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            <!-- Teaching -->
-            <table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+            <!-- Skills -->
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
               <tbody>
                 <tr>
-                  <td>
-                    <h2>Teaching</h2>
+                  <td style="padding:20px;width:100%;vertical-align:middle">
+                    <h2>Skills</h2>
+                    <p>
+                      <strong>Programming:</strong> Python, C++, PyTorch, Docker, Linux, React, Django, FastAPI, Flutter<br>
+                      <strong>Languages:</strong> Korean (Native), English (Proficient)
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Awards & Scholarships -->
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
+              <tbody>
+                <tr>
+                  <td style="padding:20px;width:100%;vertical-align:middle">
+                    <h2>Awards &amp; Honors</h2>
                     <ul class="compact">
-                      <!-- TODO: 실제 기록으로 교체 / 없으면 섹션 삭제 -->
-                      <li>Teaching Assistant, Introduction to Robotics, UNIST (2023)</li>
+                      <li>3rd place, AWS DeepRacer Competition, BigData Winter Camp (2022)</li>
+                      <li>3rd place, Engineering Mathematics Competition, University of Seoul (awarded for <strong>three consecutive years</strong>: 2021, 2022, 2023)</li>
+                      <li>
+                        3rd place, 
+                        <a href="https://blog.naver.com/synctree/223269601512" target="_blank">
+                          Syncathon Season 3 (AI development competition)
+                        </a>
+                        — “finSET” (2023), serving as the team leader and project coordinator
+                      </li>
+                      <li>3rd place, <a href="https://geomarket.kr/user/pst/view.do?pst_id=contest&pst_sn=99&search=VVppMi8vck9NWndkRnhPSGUySXZBZz09" target="_blank">Spatial Convergence Big Data Idea Competition</a> (2023) — Proposed and developed the company’s core concept as part of the team</li>
+
+                    </ul>
+
+                    <h2>Scholarships</h2>
+                    <ul class="compact">
+                      <li>Kochon Foundation (2022)</li>
+                      <li>Boeing Korea (2022)</li>
+                      <li>Wonhae Foundation (2023)</li>
+                      <li>AI Convergence Program Scholarship, IITP, Korean Government (2025)</li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- External Experience -->
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
+              <tbody>
+                <tr>
+                  <td style="padding:20px;width:100%;vertical-align:middle">
+                    <h2>External Experience</h2>
+                    <ul class="compact">
+                      <li>Summer exchange student, EPITA University, Paris, France (Jul 2019)</li>
+                      <li>20th UOS SeoulMate, International Exchange Student Association (Jul – Dec 2021)</li>
+                      <li>Peer Advocate, Seoul International Summer School Ambassador (Jun – Jul 2022)</li>
+                      <li>GDSC Core Member, Data Analysis &amp; AI Group, University of Seoul (Sep 2022 – Jul 2023)</li>
                     </ul>
                   </td>
                 </tr>
@@ -213,15 +253,18 @@
             </table>
 
             <!-- Education -->
-            <table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
               <tbody>
                 <tr>
-                  <td>
+                  <td style="padding:20px;width:100%;vertical-align:middle">
                     <h2>Education</h2>
                     <ul class="compact">
-                      <li>M.S., Artificial Intelligence Graduate School, UNIST (2024–Present)</li>
-                      <!-- TODO: 학부 정보 입력 -->
-                      <li>B.S., [Your Major], [Your University] ([Year])</li>
+                      <li><strong>UNIST</strong> — M.S., Artificial Intelligence Graduate School (Expected Aug 2026), GPA: 4.03/4.3<br>
+                        Advisor: Prof. Kyungdon Joo
+                      </li>
+                      <li><strong>University of Seoul</strong> — B.S., Electrical &amp; Computer Engineering (Feb 2024), GPA: 3.98/4.5 (Major 4.06/4.5)<br>
+                        Advisor: Prof. Yongchul Kim
+                      </li>
                     </ul>
                   </td>
                 </tr>
@@ -229,13 +272,13 @@
             </table>
 
             <!-- Footer -->
-            <table style="width:100%;border:0;border-spacing:0;border-collapse:separate;margin:0 auto;">
+            <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
               <tbody>
                 <tr>
                   <td style="padding:0;">
-                    <br />
+                    <br>
                     <p style="text-align:right;font-size:small;">
-                      Template from this <a href="https://github.com/jonbarron/jonbarron_website" target="_blank">website</a>.
+                      Template adapted from <a href="https://github.com/jonbarron/jonbarron_website" target="_blank">Jon Barron</a>.
                     </p>
                   </td>
                 </tr>
