@@ -427,7 +427,7 @@ ul.compact li {
 .project-image-card {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 320px;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -455,7 +455,7 @@ ul.compact li {
 }
 
 .project-title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   margin: 0 0 10px 0;
   color: white;
@@ -463,7 +463,7 @@ ul.compact li {
 }
 
 .project-meta {
-  font-size: 16px;
+  font-size: 14px;
   color: #e5e7eb;
   margin: 0;
   font-weight: 500;
