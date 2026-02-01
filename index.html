@@ -27,7 +27,7 @@
   </head>
 
   <body>
-    <table style="width:100%;max-width:1100px;border:0;border-spacing:0;margin:0 auto;padding:0 20px;">
+    <table style="width:100%;max-width:1200px;border:0;border-spacing:0;margin:0 auto;padding:0 20px;">
       <tbody>
         <tr>
           <td style="padding:0;">
@@ -36,12 +36,12 @@
             <table style="width:100%;border:0;border-spacing:0;margin:0 auto;" class="profile-table">
               <tbody>
                 <tr class="profile-row">
-                  <td style="padding:2.5%;width:35%;max-width:35%;vertical-align:middle;text-align:center;">
+                  <td style="padding:2.5%;width:25%;max-width:25%;vertical-align:middle;text-align:center;">
                     <a href="images/profile.jpg">
                       <img src="images/profile.jpg" alt="profile photo" style="width:100%;max-width:100%;object-fit:cover;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);" class="round">
                     </a>
                   </td>
-                  <td style="padding:2.5%;width:65%;vertical-align:middle;">
+                  <td style="padding:2.5%;width:75%;vertical-align:middle;">
                     <p class="name" style="text-align:center;">Yongjun Choi</p>
                     <p style="text-align:center;color:#6b7280;font-size:18px;margin-top:10px;">
                       M.S. Student at UNIST<br>
@@ -72,10 +72,10 @@
                       <a href="mailto:ccyjun123@unist.ac.kr" class="contact-pill">ccyjun123@unist.ac.kr</a>
                     </p>
                     <p style="text-align:center;margin-top:20px;">
-                      <a href="data/CV_Yongjun.pdf" target="_blank" class="nav-link">
+                      <a href="data/eng.pdf" target="_blank" class="nav-link">
                         <i class="fas fa-file-alt"></i> CV(Eng.)
                       </a>
-                      <a href="data/CV_yongjun(kor).pdf" target="_blank" class="nav-link">
+                      <a href="data/kor.pdf" target="_blank" class="nav-link">
                         <i class="fas fa-file-alt"></i> CV(Kor.)
                       </a>
                       <a href="https://www.linkedin.com/in/yongjun-choi-b84546279/" target="_blank" class="nav-link">
@@ -195,12 +195,13 @@
               </tbody>
             </table>
 
-            <!-- Projects (핵심만 정리) -->
+            <!-- Projects -->
             <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
               <tbody>
                 <tr>
                   <td style="padding:20px;width:100%;vertical-align:middle">
-                    <h2>Selected Projects</h2>
+                    <h2>Projects</h2>
+                    <p style="color:#6b7280;font-size:15px;margin-top:8px;">Under Construction for details!</p>
                   </td>
                 </tr>
               </tbody>
@@ -208,111 +209,155 @@
 
             <table style="width:100%;border:0;border-spacing:0;margin:0 auto;">
               <tbody>
-                <!-- Project 1: AnyBald (Most Recent) -->
                 <tr>
                   <td style="padding:10px 20px;" colspan="2">
-                    <div class="pub-card">
-                      <div class="pub-content-wrapper">
-                        <div class="pub-image-col">
-                          <div class="pub-image">
-                            <img src="images/fig1_1.jpg" width="100%" alt="Diffusion-based Hair Removal">
+                    <!-- Projects Carousel Container -->
+                    <div class="projects-carousel">
+                      <button class="carousel-btn carousel-btn-prev" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                      </button>
+                      
+                      <div class="carousel-container">
+                        <div class="carousel-track" id="projectsTrack">
+                          <!-- Project 1: Hair Removal -->
+                          <div class="carousel-item">
+                            <div class="project-image-card">
+                              <img src="images/fig1_1.jpg" alt="Hair Removal Project">
+                              <div class="project-overlay">
+                                <h3 class="project-title">Realistic Hair Removal</h3>
+                                <p class="project-meta">2025 · Diffusion Model · Image Editing</p>
+                                <!-- <p class="project-desc">Developed a robust hair removal framework using diffusion models for realistic bald rendering.</p> -->
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div class="pub-text-col">
-                          <span class="papertitle">Realistic Hair Removal and Reconstruction in Images</span><br>
-                          <div style="margin-top:6px;">
-                            <span class="badge badge-date">2025</span>
-                            <span style="font-size:14px;color:#6b7280;">Research project (Working with Modiface)</span>
-                          </div>
-                          <ul class="compact" style="margin-top:12px;">
-                            <li>Developed a robust <b>hair removal framework</b> primarily designed for hair transfer applications, enabling realistic and consistent bald rendering across diverse scenarios.</li>
-                            <li>Served as the <b>technical lead</b> in implementing the core diffusion-based model and proposing the initial data augmentation pipeline for robust training.</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
 
-                <!-- Project 2: Detecting Anomalies -->
-                <tr>
-                  <td style="padding:10px 20px;" colspan="2">
-                    <div class="pub-card">
-                      <div class="pub-content-wrapper">
-                        <div class="pub-image-col">
-                          <div class="pub-image">
-                            <img src="images/anycall_fig.jpg" width="100%" alt="practical video anomaly detection system in mobile devices">
+                          <!-- Project 2: Video Anomaly Detection -->
+                          <div class="carousel-item">
+                            <div class="project-image-card">
+                              <img src="images/anycall_fig.jpg" alt="Video Anomaly Detection">
+                              <div class="project-overlay">
+                                <h3 class="project-title">Video Anomaly Detection</h3>
+                                <p class="project-meta">2024 · Video Anomaly Detection · Industrial AI</p>
+                                <!-- <p class="project-desc">Built video anomaly detection system for industrial display inspection.</p> -->
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div class="pub-text-col">
-                          <span class="papertitle">Detecting Anomalies from normal videos</span><br>
-                          <div style="margin-top:6px;">
-                            <span class="badge badge-date">2024</span>
-                            <span style="font-size:14px;color:#6b7280;">Industrial project (funded by Samsung Electronics)</span>
-                          </div>
-                          <ul class="compact" style="margin-top:12px;">
-                            <li>Developed video anomaly detection system for industrial display inspection, built to ensure stable defect detection during long-term multi-device operation.</li>
-                            <li>Served as the <b>technical lead</b>, spearheading the implementation of the core proposed method and conducting all major experiments.</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
 
-                <!-- Project 3: Gomoku AI -->
-                <tr>
-                  <td style="padding:10px 20px;" colspan="2">
-                    <div class="pub-card">
-                      <div class="pub-content-wrapper">
-                        <div class="pub-image-col">
-                          <div class="pub-image">
-                            <img src="images/gomoku.png" width="100%" height="180" alt="Gomoku AI">
+                          <!-- Project 3: Gomoku AI -->
+                          <div class="carousel-item">
+                            <div class="project-image-card">
+                              <img src="images/gomoku.png" alt="Gomoku AI">
+                              <div class="project-overlay">
+                                <h3 class="project-title">Gomoku AI Robot</h3>
+                                <p class="project-meta">2024 · HRI · LeRobot</p>
+                                <!-- <p class="project-desc">Vision-based AI robot system for playing strategic board games.</p> -->
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div class="pub-text-col">
-                          <span class="papertitle">Gomoku AI: Demonstrating a Vision-Based AI Robot for Strategic Board Games</span><br>
-                          <div style="margin-top:6px;">
-                            <span class="badge badge-date">2024</span>
-                            <span style="font-size:14px;color:#6b7280;">HRI course final project</span>
-                          </div>
-                          <ul class="compact" style="margin-top:12px;">
-                            <li>Built a vision-based human–robot interaction system for playing Gomoku, integrating real-time perception, AI decision-making, and robotic arm control.</li>
-                            <li>Responsible for the entire <b>vision module</b>, developing the perception system that enables the robot to recognize and understand the full game state.</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
 
-                <!-- Project 4: Lang-Grouping -->
-                <tr>
-                  <td style="padding:10px 20px;" colspan="2">
-                    <div class="pub-card">
-                      <div class="pub-content-wrapper">
-                        <div class="pub-image-col">
-                          <div class="pub-image">
-                            <img src="images/lang_grouping.PNG" width="100%" height="180" alt="lang feature + 3dgs">
+                          <!-- Project 4: Lang-Grouping -->
+                          <div class="carousel-item">
+                            <div class="project-image-card">
+                              <img src="images/lang_grouping.PNG" alt="Lang-Grouping">
+                              <div class="project-overlay">
+                                <h3 class="project-title">Lang-Grouping</h3>
+                                <p class="project-meta">2024 · Gaussian Splatting · CLIP</p>
+                                <!-- <p class="project-desc">Object-centric semantic grouping for 3D scene understanding.</p> -->
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div class="pub-text-col">
-                          <span class="papertitle">Lang-Grouping: Object-centric semantic grouping for better understanding 3D scenes</span><br>
-                          <div style="margin-top:6px;">
-                            <span class="badge badge-date">2024</span>
-                            <span style="font-size:14px;color:#6b7280;">3D vision course final project · Apr – Jun 2024</span>
+
+                          <!-- Project 5: Cheese! -->
+                          <div class="carousel-item">
+                            <div class="project-image-card">
+                              <img src="images/cheese_mainfig.png" alt="Cheese Generative Editing">
+                              <div class="project-overlay">
+                                <h3 class="project-title">Cheese! Generative Editing</h3>
+                                <p class="project-meta">2025 · Generative AI · Image Editing</p>
+                                <!-- <p class="project-desc">Led a team to develop generative image editing application.</p> -->
+                              </div>
+                            </div>
                           </div>
-                          <ul class="compact" style="margin-top:12px;">
-                            <li>Object-level language–3D scene understanding framework, reducing inference time compared to LangSplat.</li>
-                            <li>Propose an object-centric contrastive learning approach to enhance multi-view consistency for CLIP feature distillation in Gaussian Splatting.</li>
-                          </ul>
                         </div>
                       </div>
+
+                      <button class="carousel-btn carousel-btn-next" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                      </button>
+                    </div>
+
+                    <!-- Carousel Indicators -->
+                    <div class="carousel-indicators" id="indicators">
+                      <span class="indicator active" data-slide="0"></span>
+                      <span class="indicator" data-slide="1"></span>
+                      <span class="indicator" data-slide="2"></span>
+                      <span class="indicator" data-slide="3"></span>
+                      <span class="indicator" data-slide="4"></span>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
+
+            <script>
+              (function() {
+                let currentSlide = 0;
+                const totalSlides = 5;
+                const track = document.getElementById('projectsTrack');
+                const indicators = document.querySelectorAll('.indicator');
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+
+                function updateCarousel() {
+                  if (!track) return;
+                  track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+                  
+                  indicators.forEach(function(indicator, index) {
+                    if (index === currentSlide) {
+                      indicator.classList.add('active');
+                    } else {
+                      indicator.classList.remove('active');
+                    }
+                  });
+                }
+
+                function moveCarousel(direction) {
+                  currentSlide += direction;
+                  if (currentSlide < 0) currentSlide = totalSlides - 1;
+                  if (currentSlide >= totalSlides) currentSlide = 0;
+                  updateCarousel();
+                }
+
+                function goToSlide(index) {
+                  currentSlide = index;
+                  updateCarousel();
+                }
+
+                // Event listeners
+                if (prevBtn) {
+                  prevBtn.addEventListener('click', function() {
+                    moveCarousel(-1);
+                  });
+                }
+
+                if (nextBtn) {
+                  nextBtn.addEventListener('click', function() {
+                    moveCarousel(1);
+                  });
+                }
+
+                indicators.forEach(function(indicator, index) {
+                  indicator.addEventListener('click', function() {
+                    goToSlide(index);
+                  });
+                });
+
+                // Auto-play carousel every 5 seconds
+                setInterval(function() {
+                  moveCarousel(1);
+                }, 5000);
+              })();
+            </script>
 
             <!-- Experience -->
             <table style="width:100%; border:0; border-spacing:0; margin:0 auto;">
@@ -340,29 +385,20 @@
                     </div>
 
                     <div class="experience-item">
-                      <div class="experience-title">Teaching Assistant</div>
-                      <div style="color:#2563eb;font-size:14px;margin-bottom:4px;">UNIST</div>
-                      <div class="experience-date">Jul 2024 – Dec 2024</div>
-                      <ul style="list-style-type: circle; margin: 5px 0 0 20px;padding-left:0;">
-                        <li>AI Programming 2 (Sep 2024 – Dec 2024)</li>
-                        <li>Kyungnam Novatus Academia (Jul 2024)</li>
-                      </ul>
-                    </div>
-
-                    <div class="experience-item">
                       <div class="experience-title">Research Assistant</div>
                       <div style="color:#2563eb;font-size:14px;margin-bottom:4px;">3D Vision &amp; Robotics Lab, UNIST</div>
                       <div class="experience-date">Mar 2024 – Aug 2026</div>
                       <ul style="list-style-type: circle; margin: 5px 0 0 20px;padding-left:0;">
                         <li>Video understanding, Language-guided 3D scene understanding</li>
                         <li>Industrial project with Samsung Electronics (Technical Leading)</li>
+                        <li>Teaching Assistant: AI Programming 2 (Sep 2024), Kyungnam Novatus Academia (Jul 2024)</li>
                       </ul>
                     </div>
 
                     <div class="experience-item">
                       <div class="experience-title">Software Developer Intern</div>
-                      <div style="color:#2563eb;font-size:14px;margin-bottom:4px;">
-                        <a href="https://www.upsight.co.kr/" target="_blank">Upsight</a>
+                      <div style="font-size:14px;margin-bottom:4px;">
+                        <a href="https://www.upsight.co.kr/" target="_blank" style="color:#2563eb;text-decoration:none;">Upsight</a>
                       </div>
                       <div class="experience-date">Jun 2023 – Aug 2023</div>
                       <ul style="list-style-type: circle; margin: 5px 0 0 20px;padding-left:0;">
@@ -404,16 +440,14 @@
                         </li>
                         <li style="margin-bottom:12px;">
                           <span style="font-weight:600;color:#1f2937;">🏆 3rd place</span>, 
-                          <a href="https://geomarket.kr/user/pst/view.do?pst_id=contest&pst_sn=99&search=VVppMi8vck9NWndkRnhPSGUySXZBZz09" target="_blank">
-                            Spatial Convergence Big Data Idea Competition
-                          </a> (2023)<br>
+                          Spatial Convergence Big Data Idea Competition 
+                          <a href="https://geomarket.kr/user/pst/view.do?pst_id=contest&pst_sn=99&search=VVppMi8vck9NWndkRnhPSGUySXZBZz09" target="_blank" class="award-link">[page]</a> (2023)<br>
                           <span style="color:#6b7280;font-size:13px;margin-left:20px;">Proposed and developed the company's core concept as part of the team</span>
                         </li>
                         <li>
                           <span style="font-weight:600;color:#1f2937;">🏆 3rd place</span>, 
-                          <a href="https://blog.naver.com/synctree/223269601512" target="_blank">
-                            Syncathon Season 3 (AI development competition)
-                          </a> — "finSET" (2023)<br>
+                          Syncathon Season 3 (AI development competition) 
+                          <a href="https://blog.naver.com/synctree/223269601512" target="_blank" class="award-link">[page]</a> — "finSET" (2023)<br>
                           <span style="color:#6b7280;font-size:13px;margin-left:20px;">Serving as the team leader and project coordinator</span>
                         </li>
                       </ul>
