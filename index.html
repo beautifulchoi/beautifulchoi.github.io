@@ -260,7 +260,7 @@
 
       function setActive(id) {
         navLinks.forEach((link) => {
-          const isActive = link.getAttribute('href') === '#' + id;
+          const isActive = link.hash === '#' + id;
           link.classList.toggle('active', isActive);
           if (isActive) {
             link.setAttribute('aria-current', 'true');
@@ -274,18 +274,19 @@
       }
 
       function getCurrentSectionId() {
-        const pageBottom = window.scrollY + window.innerHeight;
-        const documentBottom = document.documentElement.scrollHeight - 8;
-        if (pageBottom >= documentBottom) {
-          return sections[sections.length - 1].id;
+        const viewportMarker = window.innerHeight * 0.35;
+        let current = sections[0];
+
+        for (const section of sections) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= viewportMarker) current = section;
         }
 
-        const probe = window.scrollY + Math.max(120, window.innerHeight * 0.28);
-        let current = sections[0].id;
-        sections.forEach((section) => {
-          if (section.offsetTop <= probe) current = section.id;
-        });
-        return current;
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+          current = sections[sections.length - 1];
+        }
+
+        return current.id;
       }
 
       let ticking = false;
@@ -298,15 +299,23 @@
         });
       }
 
+      const observer = new IntersectionObserver(updateActiveSection, {
+        root: null,
+        rootMargin: '-18% 0px -62% 0px',
+        threshold: [0, 0.15, 0.5, 1]
+      });
+      sections.forEach((section) => observer.observe(section));
+
       navLinks.forEach((link) => {
         link.addEventListener('click', () => {
-          const id = link.getAttribute('href').slice(1);
-          setActive(id);
+          setActive(link.hash.slice(1));
         });
       });
 
       window.addEventListener('scroll', updateActiveSection, { passive: true });
       window.addEventListener('resize', updateActiveSection);
+      window.addEventListener('hashchange', updateActiveSection);
+      window.addEventListener('load', updateActiveSection);
       updateActiveSection();
     })();
   </script>
