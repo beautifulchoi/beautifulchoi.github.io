@@ -137,6 +137,7 @@
         </div>
         <div class="career-grid">
           <article class="experience-card highlight">
+            <img class="institution-logo" src="images/institutions/utoronto.svg" alt="University of Toronto badge">
             <div class="experience-meta">
               <span>Jan 2025 – Jun 2025</span>
               <span>Toronto, Canada</span>
@@ -148,6 +149,7 @@
           </article>
 
           <article class="experience-card highlight">
+            <img class="institution-logo" src="images/institutions/unist.svg" alt="UNIST badge">
             <div class="experience-meta">
               <span>Mar 2024 – Aug 2026</span>
               <span>Ulsan, Korea</span>
@@ -159,6 +161,7 @@
           </article>
 
           <article class="experience-card">
+            <img class="institution-logo" src="images/institutions/upsight.svg" alt="Upsight badge">
             <div class="experience-meta">
               <span>Jun 2023 – Aug 2023</span>
               <span>Seoul, Korea</span>
@@ -170,6 +173,7 @@
           </article>
 
           <article class="experience-card">
+            <img class="institution-logo" src="images/institutions/uos.svg" alt="University of Seoul badge">
             <div class="experience-meta">
               <span>Apr 2022 – Jul 2023</span>
               <span>Seoul, Korea</span>
@@ -215,6 +219,7 @@
         </div>
         <div class="education-grid">
           <article class="education-card current">
+            <img class="institution-logo" src="images/institutions/unist.svg" alt="UNIST badge">
             <div class="education-topline">
               <span class="degree-label">M.S.</span>
               <span class="date">Expected Aug 2026</span>
@@ -223,12 +228,14 @@
             <p class="institution">UNIST</p>
             <div class="education-details">
               <span>Advisor · Prof. Kyungdon Joo</span>
+              <span>Master Thesis · Cross-Perspective Binaural Audio Synthesis</span>
               <span>GPA · 4.08 / 4.3</span>
             </div>
             <div class="chip-row"><span>Multimodal AI</span><span>3D Vision</span><span>Video Understanding</span></div>
           </article>
 
           <article class="education-card">
+            <img class="institution-logo" src="images/institutions/uos.svg" alt="University of Seoul badge">
             <div class="education-topline">
               <span class="degree-label">B.S.</span>
               <span class="date">Feb 2024</span>
@@ -264,9 +271,6 @@
           link.classList.toggle('active', isActive);
           if (isActive) {
             link.setAttribute('aria-current', 'true');
-            if (window.matchMedia('(max-width: 960px)').matches) {
-              link.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
-            }
           } else {
             link.removeAttribute('aria-current');
           }
@@ -274,15 +278,25 @@
       }
 
       function getCurrentSectionId() {
-        const viewportMarker = window.innerHeight * 0.35;
         let current = sections[0];
+        let bestScore = -1;
+        const marker = window.innerHeight * 0.35;
 
         for (const section of sections) {
           const rect = section.getBoundingClientRect();
-          if (rect.top <= viewportMarker) current = section;
+          const visibleTop = Math.max(rect.top, 0);
+          const visibleBottom = Math.min(rect.bottom, window.innerHeight);
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+          const markerBonus = rect.top <= marker && rect.bottom >= marker ? 120 : 0;
+          const score = visibleHeight + markerBonus;
+
+          if (score > bestScore) {
+            bestScore = score;
+            current = section;
+          }
         }
 
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 24) {
           current = sections[sections.length - 1];
         }
 
