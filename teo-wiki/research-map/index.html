@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Research Map | Teo Wiki</title>
+    <meta name="author" content="Yongjun Choi">
+    <meta name="description" content="A public research map for Yongjun “Teo” Choi, connecting visual editing, scene understanding, video understanding, and audio-visual learning.">
+    <meta property="og:title" content="Research Map | Teo Wiki">
+    <meta property="og:description" content="How Teo’s projects and research questions connect.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/research-map/">
+    <link rel="shortcut icon" href="../../images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../wiki.css">
+  </head>
+  <body>
+    <header class="wiki-header">
+      <a class="brand" href="../" aria-label="Teo Wiki home">
+        <span class="brand-title">Teo Wiki</span>
+        <span class="brand-label">RESEARCH MAP</span>
+      </a>
+      <form class="ask-form" id="askForm" role="search">
+        <label class="sr-only" for="askInput">Search the research map</label>
+        <input id="askInput" type="search" placeholder="Search the research map" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <nav class="top-links" aria-label="External links">
+        <a href="../">Teo Wiki</a>
+        <a href="../../">Portfolio</a>
+        <a href="../../data/eng.pdf">CV</a>
+        <a href="mailto:ccyjun123@unist.ac.kr">Email</a>
+      </nav>
+    </header>
+
+    <div class="wiki-shell map-shell">
+      <aside class="sidebar" aria-label="Research map navigation">
+        <p class="sidebar-kicker">Research map</p>
+        <a href="#map-overview">Overview</a>
+        <a href="#visual-editing">Visual editing</a>
+        <a href="#scene-understanding">Scene understanding</a>
+        <a href="#video-understanding">Video understanding</a>
+        <a href="#audio-visual-learning">Audio-visual learning</a>
+        <a href="#practical-ai">Practical AI</a>
+        <a href="#llm-wiki-loop">LLM Wiki loop</a>
+      </aside>
+
+      <main class="page-main">
+        <div class="article-tabs" aria-label="Article actions">
+          <a href="../">Article</a>
+          <a class="active" href="#map-overview">Research Map</a>
+          <a href="../#public-boundary">Public-safe version</a>
+        </div>
+
+        <article class="article research-map-article">
+          <h1 id="map-overview">Teo Research Map</h1>
+          <p class="subtitle">A public map of how Teo’s projects, methods, and open questions connect</p>
+
+          <p>This map is a public-facing layer of Teo Wiki. It is not a full private research notebook; instead, it explains the visible structure behind Teo’s work: visual editing, 3D/scene understanding, video understanding, audio-visual learning, and practical AI systems.</p>
+
+          <div class="note collaborator-note">
+            <strong>Map thesis.</strong> Teo’s projects can be read as attempts to make multimodal AI systems more useful in the real world: edit visual content realistically, understand scenes and videos, compare signals over time, and evaluate systems under practical constraints.
+          </div>
+
+          <section class="map-board" aria-label="Research map diagram">
+            <article class="map-node map-core">
+              <span class="tag">Core identity</span>
+              <h2>Researcher-builder for practical multimodal AI</h2>
+              <p>Connecting computer vision research with systems that can be tested, deployed, and explained.</p>
+            </article>
+
+            <div class="map-branches">
+              <article class="map-node" id="visual-editing">
+                <span class="tag">Visual Editing</span>
+                <h3>Diffusion-based image manipulation</h3>
+                <ul>
+                  <li>Identity-preserving editing</li>
+                  <li>In-the-wild robustness</li>
+                  <li>AnyBald and realistic hair removal</li>
+                </ul>
+              </article>
+
+              <article class="map-node" id="scene-understanding">
+                <span class="tag">Scene Understanding</span>
+                <h3>Language-guided 3D reasoning</h3>
+                <ul>
+                  <li>Object-centric grouping</li>
+                  <li>3D scene representations</li>
+                  <li>Gaussian Splatting and CLIP-style semantics</li>
+                </ul>
+              </article>
+
+              <article class="map-node" id="video-understanding">
+                <span class="tag">Video Understanding</span>
+                <h3>Reference-guided comparison over time</h3>
+                <ul>
+                  <li>Video alignment</li>
+                  <li>Industrial anomaly detection</li>
+                  <li>RG-VAD and automated display inspection</li>
+                </ul>
+              </article>
+
+              <article class="map-node" id="audio-visual-learning">
+                <span class="tag">Audio-Visual Learning</span>
+                <h3>Multimodal temporal modeling</h3>
+                <ul>
+                  <li>Vision + audio representation</li>
+                  <li>Temporal alignment and evaluation</li>
+                  <li>Future-facing multimodal frameworks</li>
+                </ul>
+              </article>
+            </div>
+          </section>
+
+          <section id="practical-ai">
+            <h2>Practical AI applications</h2>
+            <p>The map is held together by a practical systems orientation. Projects are not only demonstrations of model capability; they ask what must be true for a model to work under real conditions: noisy input, long videos, human interaction, industrial constraints, and ambiguous evaluation.</p>
+            <div class="card-list">
+              <article class="mini-card">
+                <span class="tag">Robotics / HRI</span>
+                <h3>Vision-based Gomoku AI robot</h3>
+                <p>A physical interaction project combining perception, decision-making, and robotic control.</p>
+              </article>
+              <article class="mini-card">
+                <span class="tag">Creative tooling</span>
+                <h3>Cheese! Generative Editing</h3>
+                <p>A creative application direction that tests how generative editing can become usable tooling.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="llm-wiki-loop">
+            <h2>LLM Wiki maintenance loop</h2>
+            <p>This page is also a template for how Teo Wiki can be maintained over time using Karpathy’s LLM Wiki pattern. Public pages should be curated outputs from a private markdown knowledge base, not one-off static copy.</p>
+            <ol class="workflow-list">
+              <li><strong>Ingest:</strong> add public-safe papers, project pages, reading notes, and research statements into a private raw source folder.</li>
+              <li><strong>Compile:</strong> let the LLM update concept pages such as visual editing, video anomaly detection, and audio-visual learning.</li>
+              <li><strong>Cross-link:</strong> connect projects to concepts, concepts to open questions, and questions back to publications.</li>
+              <li><strong>Curate:</strong> export only public-safe summaries to this website.</li>
+              <li><strong>Lint:</strong> periodically check for stale claims, broken links, weak citations, and missing pages.</li>
+            </ol>
+          </section>
+
+          <section id="open-questions-map">
+            <h2>Questions this map should keep answering</h2>
+            <ul>
+              <li>Which research direction best explains Teo’s transition from visual editing to broader multimodal learning?</li>
+              <li>How do practical systems projects shape the kinds of model evaluation Teo cares about?</li>
+              <li>Which concepts should become standalone public wiki pages as the research story matures?</li>
+            </ul>
+          </section>
+
+          <footer class="category-footer">
+            Categories: Research map · Multimodal AI · Visual editing · Scene understanding · Video understanding · Audio-visual learning · LLM Wiki
+          </footer>
+        </article>
+      </main>
+    </div>
+
+    <script src="../wiki.js"></script>
+  </body>
+</html>
