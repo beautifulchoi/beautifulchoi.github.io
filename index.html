@@ -223,7 +223,7 @@
             <p class="institution">UNIST</p>
             <div class="education-details">
               <span>Advisor · Prof. Kyungdon Joo</span>
-              <span>GPA · 4.03 / 4.3</span>
+              <span>GPA · 4.08 / 4.3</span>
             </div>
             <div class="chip-row"><span>Multimodal AI</span><span>3D Vision</span><span>Video Understanding</span></div>
           </article>
@@ -238,7 +238,7 @@
             <div class="education-details">
               <span>Advisor · Prof. Yongchul Kim</span>
               <span>GPA · 3.98 / 4.5</span>
-              <span>Major GPA · 4.06 / 4.5</span>
+              <span>Major GPA · 3.96 / 4.5</span>
             </div>
             <div class="chip-row"><span>Computer Vision</span><span>Representation Learning</span><span>Engineering</span></div>
           </article>
@@ -248,5 +248,67 @@
       <footer>© 2026 Yongjun Choi. All rights reserved.</footer>
     </main>
   </div>
+
+  <script>
+    (function () {
+      const navLinks = Array.from(document.querySelectorAll('.side-nav a[href^="#"]'));
+      const sections = navLinks
+        .map((link) => document.querySelector(link.getAttribute('href')))
+        .filter(Boolean);
+
+      if (!navLinks.length || !sections.length) return;
+
+      function setActive(id) {
+        navLinks.forEach((link) => {
+          const isActive = link.getAttribute('href') === '#' + id;
+          link.classList.toggle('active', isActive);
+          if (isActive) {
+            link.setAttribute('aria-current', 'true');
+            if (window.matchMedia('(max-width: 960px)').matches) {
+              link.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+            }
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      }
+
+      function getCurrentSectionId() {
+        const pageBottom = window.scrollY + window.innerHeight;
+        const documentBottom = document.documentElement.scrollHeight - 8;
+        if (pageBottom >= documentBottom) {
+          return sections[sections.length - 1].id;
+        }
+
+        const probe = window.scrollY + Math.max(120, window.innerHeight * 0.28);
+        let current = sections[0].id;
+        sections.forEach((section) => {
+          if (section.offsetTop <= probe) current = section.id;
+        });
+        return current;
+      }
+
+      let ticking = false;
+      function updateActiveSection() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          setActive(getCurrentSectionId());
+          ticking = false;
+        });
+      }
+
+      navLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          const id = link.getAttribute('href').slice(1);
+          setActive(id);
+        });
+      });
+
+      window.addEventListener('scroll', updateActiveSection, { passive: true });
+      window.addEventListener('resize', updateActiveSection);
+      updateActiveSection();
+    })();
+  </script>
 </body>
 </html>
