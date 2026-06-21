@@ -274,11 +274,137 @@ strong { font-weight: 700; }
 }
 .project-card p, .timeline-card p, .compact-card p { margin: 0; color: var(--muted); font-size: 14px; }
 
+.section-heading-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  gap: 22px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+.section-heading-row h2 { margin-bottom: 0; }
+.section-heading-row p {
+  margin: 0 0 2px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.career-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.experience-card,
+.education-card {
+  position: relative;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #e7eaf0;
+  background:
+    linear-gradient(180deg, rgba(248, 250, 252, .72), rgba(255,255,255,0) 44%),
+    #fff;
+  transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.experience-card:hover,
+.education-card:hover {
+  transform: translateY(-2px);
+  border-color: #d3d8e2;
+  box-shadow: 0 16px 36px rgba(31, 41, 55, .07);
+}
+.experience-card.highlight::before,
+.education-card.current::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent), #d6a0a8);
+}
+.experience-meta,
+.education-topline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.experience-card h3,
+.education-card h3 {
+  margin: 0;
+  color: #181b20;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -.018em;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+.institution {
+  margin: 5px 0 0;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+}
+.experience-summary {
+  margin: 12px 0 0;
+  color: #424a55;
+  font-size: 13.8px;
+  line-height: 1.58;
+}
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+.chip-row span {
+  padding: 4px 8px;
+  border: 1px solid #e4e8ef;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #4f5967;
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.education-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+  gap: 14px;
+}
+.degree-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #202124;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.education-details {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  color: #424a55;
+  font-size: 13.5px;
+}
+.education-details span {
+  padding-left: 12px;
+  border-left: 2px solid #e4e8ef;
+}
+
 .timeline { display: grid; gap: 12px; }
 .timeline-card { border-left: 4px solid rgba(139,30,45,.28); }
 .timeline-card ul, .compact-card ul { margin: 8px 0 0 18px; padding: 0; color: #3f4650; font-size: 13.8px; }
 .timeline-card li, .compact-card li { margin: 4px 0; }
-.date { display: inline-block; margin-bottom: 5px; color: var(--accent); font-weight: 800; font-size: 12px; letter-spacing: .05em; }
+.date { display: inline-block; color: var(--accent); font-weight: 800; font-size: 12px; letter-spacing: .05em; }
 .two-col {
   display: grid;
   grid-template-columns: repeat(2, minmax(0,1fr));
@@ -335,7 +461,10 @@ footer { color: var(--muted); font-size: 13px; padding-bottom: 20px; }
   .wiki-callout { grid-template-columns: 1fr; }
   .publication-card { grid-template-columns: 1fr; }
   .publication-card img { height: 160px; }
-  .project-grid, .two-col { grid-template-columns: 1fr; }
+  .project-grid, .career-grid, .education-grid, .two-col { grid-template-columns: 1fr; }
+  .section-heading-row { grid-template-columns: 1fr; gap: 6px; }
+  .experience-card, .education-card { padding: 16px; }
+  .experience-card h3, .education-card h3 { font-size: 16.5px; }
   .section { margin-bottom: 38px; }
   .action-links a { flex: 0 1 auto; justify-content: flex-start; }
   .primary-button { width: 100%; }
