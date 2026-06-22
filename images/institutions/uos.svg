@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160" role="img" aria-label="University of Seoul">
-  <rect width="240" height="160" rx="28" fill="#EAF3FF"/>
-  <rect x="18" y="18" width="204" height="124" rx="24" fill="#ffffff" stroke="#0B5CAB" stroke-opacity="0.16"/>
-  <circle cx="120" cy="68" r="34" fill="#0B5CAB" fill-opacity="0.10"/>
-  <text x="120" y="78" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" letter-spacing="-1" fill="#0B5CAB">UOS</text>
-  <text x="120" y="113" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#4b5563">University of Seoul</text>
-</svg>
