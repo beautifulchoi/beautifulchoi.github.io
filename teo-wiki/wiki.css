@@ -408,6 +408,34 @@ a:focus {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
+.reference-list {
+  display: grid;
+  gap: 14px;
+}
+
+.reference-card {
+  padding: 16px;
+  border: 1px solid var(--soft-line);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ffffff, #f8fbff);
+}
+
+.reference-card h3 {
+  margin-bottom: 8px;
+}
+
+.reference-card p {
+  margin-top: 0;
+}
+
+.reference-card code {
+  padding: 1px 5px;
+  border: 1px solid var(--soft-line);
+  border-radius: 4px;
+  background: #f8f9fa;
+  font-size: .94em;
+}
+
 .tag {
   display: inline-block;
   margin-bottom: 8px;
