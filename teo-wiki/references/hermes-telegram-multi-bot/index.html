@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hermes Telegram Multi-Bot Profile Isolation | Teo Wiki</title>
+    <meta name="author" content="Yongjun Choi">
+    <meta name="description" content="A Teo Wiki reference note about running multiple Telegram bots with Hermes using profile and gateway isolation.">
+    <meta property="og:title" content="Hermes Telegram Multi-Bot Profile Isolation | Teo Wiki">
+    <meta property="og:description" content="A distilled public note about why Hermes Telegram multi-bot operation needs profile and gateway isolation.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/hermes-telegram-multi-bot/">
+    <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../wiki.css">
+  </head>
+  <body>
+    <header class="wiki-header">
+      <a class="brand" href="../../" aria-label="Teo Wiki home">
+        <span class="brand-title">Teo Wiki</span>
+        <span class="brand-label">REFERENCE NOTE</span>
+      </a>
+      <form class="ask-form" id="askForm" role="search">
+        <label class="sr-only" for="askInput">Search this note</label>
+        <input id="askInput" type="search" placeholder="Search this note" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <nav class="top-links" aria-label="External links">
+        <a href="../">References</a>
+        <a href="../../">Article</a>
+        <a href="../../research-map/">Research Map</a>
+        <a href="../../../">Portfolio</a>
+      </nav>
+    </header>
+
+    <div class="wiki-shell">
+      <aside class="sidebar" aria-label="Reference navigation">
+        <p class="sidebar-kicker">Reference note</p>
+        <a href="#summary">Summary</a>
+        <a href="#source">Source</a>
+        <a href="#takeaways">Takeaways</a>
+        <a href="#operating-pattern">Operating pattern</a>
+        <a href="#why-it-matters">Why it matters</a>
+      </aside>
+
+      <main class="page-main">
+        <div class="article-tabs" aria-label="Article actions">
+          <a href="../../">Article</a>
+          <a href="../">References</a>
+          <a class="active" href="#summary">Reference note</a>
+        </div>
+
+        <article class="article">
+          <h1 id="summary">Hermes Telegram multi-bot profile isolation</h1>
+          <p class="subtitle">A distilled note from a public Korean field report on operating multiple Telegram bots with Hermes.</p>
+
+          <section id="source">
+            <h2>Source</h2>
+            <p><a href="https://www.gpters.org/nocode/post/hermes-telegram-struggle-experienced-BfNNPcfgkAFlkIQ" target="_blank" rel="noopener">Hermes Telegram 디폴트 봇 1개에서 2개로 추가 할때 겪는 삽질기</a>, posted on GPTers.</p>
+            <p>The source is a hands-on account of trying to add a second Telegram bot to Hermes and discovering that the stable solution is not simply adding another token to the default setup.</p>
+          </section>
+
+          <section id="takeaways">
+            <h2>Key takeaways</h2>
+            <div class="reference-list">
+              <article class="reference-card">
+                <span class="tag">Core lesson</span>
+                <h3>Multi-bot operation is profile isolation</h3>
+                <p>A second Telegram bot should be treated as a separate Hermes profile with its own configuration, secrets, memory, sessions, skills, and gateway process.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Token hygiene</span>
+                <h3>User IDs and bot tokens are different objects</h3>
+                <p>Telegram user IDs are numeric identifiers, while bot tokens follow a <code>number:string</code> structure. Mixing them up leads to confusing gateway failures.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Operational boundary</span>
+                <h3>Gateway lifecycle should be per profile</h3>
+                <p>Each bot should be started, restarted, inspected, and debugged in the context of its own profile so one bot does not accidentally inherit another bot’s role or memory.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="operating-pattern">
+            <h2>Operating pattern</h2>
+            <p>The practical pattern is to create a named Hermes profile for each Telegram bot, place profile-specific secrets in that profile’s environment, and operate its gateway independently.</p>
+            <pre><code>~/.hermes/profiles/&lt;bot-profile&gt;/
+  .env
+  config.yaml
+  memory/
+  sessions/
+  skills/</code></pre>
+            <p>This keeps role, memory, skills, and delivery behavior separate. It also fits Hermes’ broader model of independent profiles for independent agents.</p>
+          </section>
+
+          <section id="why-it-matters">
+            <h2>Why this matters for Teo Wiki</h2>
+            <p>Teo Wiki is intended to grow as a public-facing knowledge surface backed by agent-maintained notes. Multi-profile Hermes operation is relevant because it suggests a scalable way to split agents by role: one agent can handle personal website maintenance, another can handle bus/shuttle tracking, and another can manage periodic briefings.</p>
+          </section>
+
+          <footer class="category-footer">
+            Categories: Hermes · Telegram · Profiles · Gateway operations · Multi-agent systems
+          </footer>
+        </article>
+      </main>
+    </div>
+
+    <script src="../../wiki.js"></script>
+  </body>
+</html>

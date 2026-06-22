@@ -45,7 +45,7 @@
         <a href="#experience">Experience</a>
         <a href="#values">Values</a>
         <a href="#open-questions">Open questions</a>
-        <a href="#useful-references">Useful references</a>
+        <a href="references/">References</a>
         <a href="#public-boundary">Public boundary</a>
       </aside>
 
@@ -54,6 +54,7 @@
           <a class="active" href="#summary">Article</a>
           <a href="#ask-about-teo">Ask about Teo</a>
           <a href="research-map/">Research Map</a>
+          <a href="references/">References</a>
           <a href="#public-boundary">Public-safe version</a>
         </div>
 
@@ -123,7 +124,6 @@
               <li><a href="#experience">Experience</a></li>
               <li><a href="#values">Values and operating principles</a></li>
               <li><a href="#open-questions">Open questions</a></li>
-              <li><a href="#useful-references">Useful references</a></li>
               <li><a href="#public-boundary">Public/private boundary</a></li>
             </ol>
           </nav>
@@ -250,23 +250,6 @@
               <li>What evaluation protocols make audio-visual learning trustworthy beyond benchmark accuracy?</li>
               <li>How can 3D scene understanding and multimodal reasoning become useful in practical interactive systems?</li>
             </ul>
-          </section>
-
-          <section id="useful-references">
-            <h2>Useful references</h2>
-            <p>This section collects public pages that Teo wants to preserve as practical operating notes for research, automation, and personal knowledge infrastructure.</p>
-            <div class="reference-list">
-              <article class="reference-card">
-                <span class="tag">Hermes · Telegram · Multi-agent operations</span>
-                <h3><a href="https://www.gpters.org/nocode/post/hermes-telegram-struggle-experienced-BfNNPcfgkAFlkIQ" target="_blank" rel="noopener">Hermes Telegram 디폴트 봇 1개에서 2개로 추가 할때 겪는 삽질기</a></h3>
-                <p>A Korean field report on running multiple Telegram bots with Hermes. The useful lesson is that a second bot is not merely another token: stable operation depends on separating Hermes profiles, profile-specific <code>.env</code> files, memory/session state, and gateway processes.</p>
-                <ul>
-                  <li>Treat each Telegram bot as an isolated Hermes profile rather than overloading the default profile.</li>
-                  <li>Keep Telegram user IDs and bot tokens conceptually separate, and store tokens only in profile-specific secret configuration.</li>
-                  <li>Run, restart, and inspect gateways per profile so each bot can keep its own role, memory, skills, and delivery channel.</li>
-                </ul>
-              </article>
-            </div>
           </section>
 
           <section id="public-boundary">
