@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>References | Teo Wiki</title>
     <meta name="author" content="Yongjun Choi">
-    <meta name="description" content="Curated public references and operating notes collected for Teo Wiki.">
+    <meta name="description" content="Curated public references and operating notes collected for Teo Wiki, organized by LLM foundations, agent architectures, and agent operations.">
     <meta property="og:title" content="References | Teo Wiki">
     <meta property="og:description" content="Curated public references and operating notes collected for Teo Wiki.">
     <meta property="og:type" content="website">
@@ -36,8 +36,10 @@
       <aside class="sidebar" aria-label="References navigation">
         <p class="sidebar-kicker">References</p>
         <a href="#overview">Overview</a>
-        <a href="#llm-agent-techniques">LLM agent techniques</a>
-        <a href="#automation">Automation</a>
+        <a href="#category-map">Category map</a>
+        <a href="#llm-foundations">LLM foundations</a>
+        <a href="#agent-architectures">Agent architectures</a>
+        <a href="#agent-operations">Agent operations</a>
       </aside>
 
       <main class="page-main">
@@ -49,30 +51,65 @@
 
         <article class="article">
           <h1 id="overview">Teo Wiki References</h1>
-          <p class="subtitle">Curated public pages, distilled into separate notes instead of being appended to the main profile.</p>
+          <p class="subtitle">A categorized study index for papers, techniques, and operating notes that Teo wants to preserve.</p>
 
-          <p>This section collects useful public links that Teo wants to keep as durable, public-safe notes. Each reference gets its own page so the main Teo Wiki stays clean while the knowledge base can keep growing.</p>
+          <p>This page is the table of contents for Teo’s public study notes. Each paper or useful link gets its own page; this index only keeps the catalog, category map, and short summaries.</p>
 
-          <section id="llm-agent-techniques">
-            <h2>LLM agent techniques and prompting foundations</h2>
-            <div class="reference-list">
-              <article class="reference-card">
-                <span class="tag">Paper · ReAct · Tool-using agents</span>
-                <h3><a href="react-reasoning-acting/">ReAct: reasoning and acting in language models</a></h3>
-                <p>A study note on the ReAct pattern: interleaving reasoning traces with actions and observations so an LLM can plan, use tools, inspect the environment, and revise its next step.</p>
+          <section id="category-map">
+            <h2>Category map</h2>
+            <div class="category-grid">
+              <article class="category-card">
+                <span class="tag">Category 01</span>
+                <h3><a href="#llm-foundations">LLM foundations</a></h3>
+                <p>Prompting and reasoning basics. Put papers here when they explain how LLM reasoning is elicited or evaluated before tool use.</p>
+                <p class="category-examples">Examples: Chain-of-Thought, self-consistency, reasoning evaluation, inference-time scaling.</p>
               </article>
-              <article class="reference-card">
-                <span class="tag">Paper · Chain-of-Thought · Reasoning</span>
-                <h3><a href="chain-of-thought-prompting/">Chain-of-Thought prompting</a></h3>
-                <p>A study note on CoT prompting: showing intermediate reasoning examples so large language models learn to produce step-by-step reasoning for arithmetic, commonsense, and symbolic tasks.</p>
+              <article class="category-card">
+                <span class="tag">Category 02</span>
+                <h3><a href="#agent-architectures">Agent architectures</a></h3>
+                <p>Patterns for agents that plan, use tools, call APIs, browse, write code, or interact with environments.</p>
+                <p class="category-examples">Examples: ReAct, tool use, planning loops, reflection, memory, multi-agent coordination.</p>
+              </article>
+              <article class="category-card">
+                <span class="tag">Category 03</span>
+                <h3><a href="#agent-operations">Agent operations</a></h3>
+                <p>Practical operations for running, separating, debugging, and maintaining agents in real workflows.</p>
+                <p class="category-examples">Examples: Hermes profiles, gateway operation, scheduled agents, deployment notes.</p>
               </article>
             </div>
           </section>
 
-          <section id="automation">
-            <h2>Automation and agent operations</h2>
+          <section id="llm-foundations">
+            <h2>LLM foundations</h2>
+            <p class="section-note">Start here when studying the basic mechanisms that make LLMs reason or appear to reason.</p>
             <div class="reference-list">
-              <article class="reference-card">
+              <article class="reference-card paper-card">
+                <span class="tag">Paper · Chain-of-Thought · Reasoning</span>
+                <h3><a href="chain-of-thought-prompting/">Chain-of-Thought prompting</a></h3>
+                <p>A study note on CoT prompting: showing intermediate reasoning examples so large language models learn to produce step-by-step reasoning for arithmetic, commonsense, and symbolic tasks.</p>
+                <p class="paper-meta">arXiv 2201.11903 · Wei et al. · 2022</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="agent-architectures">
+            <h2>Agent architectures</h2>
+            <p class="section-note">Put papers here when they turn an LLM from a text generator into an agent that reasons, chooses actions, observes results, and revises plans.</p>
+            <div class="reference-list">
+              <article class="reference-card paper-card">
+                <span class="tag">Paper · ReAct · Tool-using agents</span>
+                <h3><a href="react-reasoning-acting/">ReAct: reasoning and acting in language models</a></h3>
+                <p>A study note on the ReAct pattern: interleaving reasoning traces with actions and observations so an LLM can plan, use tools, inspect the environment, and revise its next step.</p>
+                <p class="paper-meta">arXiv 2210.03629 · Yao et al. · 2022</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="agent-operations">
+            <h2>Agent operations</h2>
+            <p class="section-note">Keep practical engineering notes here: setup, profiles, memory separation, gateways, cron jobs, and deployment patterns.</p>
+            <div class="reference-list">
+              <article class="reference-card ops-card">
                 <span class="tag">Hermes · Telegram · Multi-agent operations</span>
                 <h3><a href="hermes-telegram-multi-bot/">Hermes Telegram multi-bot profile isolation</a></h3>
                 <p>A distilled note from a Korean field report about running multiple Telegram bots with Hermes. The key idea is that multi-bot operation is a profile and gateway isolation problem, not just a token-management problem.</p>
@@ -81,7 +118,7 @@
           </section>
 
           <footer class="category-footer">
-            Categories: References · LLM agents · Prompting · Automation · Hermes · Multi-agent operations
+            Categories: References · LLM foundations · Agent architectures · Agent operations · Prompting · Hermes
           </footer>
         </article>
       </main>
