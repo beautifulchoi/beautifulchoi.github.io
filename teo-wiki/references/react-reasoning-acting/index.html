@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ReAct: Reasoning and Acting in Language Models | Teo Wiki</title>
+    <meta name="author" content="Yongjun Choi">
+    <meta name="description" content="A Teo Wiki study note on ReAct: Synergizing Reasoning and Acting in Language Models.">
+    <meta property="og:title" content="ReAct: Reasoning and Acting in Language Models | Teo Wiki">
+    <meta property="og:description" content="A concise study note on ReAct, the reasoning-plus-acting pattern for LLM agents.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/react-reasoning-acting/">
+    <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../wiki.css">
+  </head>
+  <body>
+    <header class="wiki-header">
+      <a class="brand" href="../../" aria-label="Teo Wiki home">
+        <span class="brand-title">Teo Wiki</span>
+        <span class="brand-label">PAPER NOTE</span>
+      </a>
+      <form class="ask-form" id="askForm" role="search">
+        <label class="sr-only" for="askInput">Search this note</label>
+        <input id="askInput" type="search" placeholder="Search this note" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <nav class="top-links" aria-label="External links">
+        <a href="../">References</a>
+        <a href="../../">Article</a>
+        <a href="../../research-map/">Research Map</a>
+        <a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">arXiv</a>
+      </nav>
+    </header>
+
+    <div class="wiki-shell">
+      <aside class="sidebar" aria-label="Paper navigation">
+        <p class="sidebar-kicker">Paper note</p>
+        <a href="#summary">Summary</a>
+        <a href="#metadata">Metadata</a>
+        <a href="#concept">Concept</a>
+        <a href="#why-important">Why important</a>
+        <a href="#study-questions">Study questions</a>
+      </aside>
+
+      <main class="page-main">
+        <div class="article-tabs" aria-label="Article actions">
+          <a href="../../">Article</a>
+          <a href="../">References</a>
+          <a class="active" href="#summary">Paper note</a>
+        </div>
+
+        <article class="article">
+          <h1 id="summary">ReAct: Synergizing Reasoning and Acting in Language Models</h1>
+          <p class="subtitle">A foundational agent-pattern paper: interleave reasoning traces with actions that query tools, environments, or external knowledge.</p>
+
+          <section id="metadata">
+            <h2>Metadata</h2>
+            <dl class="fact-list">
+              <dt>Paper</dt>
+              <dd><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">ReAct: Synergizing Reasoning and Acting in Language Models</a></dd>
+              <dt>Authors</dt>
+              <dd>Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao</dd>
+              <dt>arXiv</dt>
+              <dd>2210.03629 · first posted 2022-10-06</dd>
+              <dt>Topic</dt>
+              <dd>LLM agents, reasoning traces, tool/environment interaction, action planning</dd>
+            </dl>
+          </section>
+
+          <section id="concept">
+            <h2>Concept in one page</h2>
+            <div class="reference-list">
+              <article class="reference-card">
+                <span class="tag">Core idea</span>
+                <h3>Reasoning and acting should be interleaved</h3>
+                <p>ReAct asks the model to alternate between internal reasoning steps and external actions. The model can think about what it knows, decide what to do next, call a tool or interact with an environment, observe the result, and then update its next reasoning step.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Korean quick note</span>
+                <h3>생각만 하는 CoT에서, 행동하는 agent로 넘어가는 다리</h3>
+                <p>Chain-of-Thought가 “문제 풀이 과정을 말로 풀어내는 방식”이라면, ReAct는 거기에 <strong>Action</strong>을 붙인다. 즉, 모델이 추론하다가 검색, 도구 호출, 환경 조작 같은 행동을 하고, 관찰 결과를 다시 추론에 반영한다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Pattern</span>
+                <h3>Thought → Action → Observation → Thought</h3>
+                <p>The practical template is a loop: generate a thought, choose an action, receive an observation, then continue reasoning. This is close to how many modern tool-using agents are implemented.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="why-important">
+            <h2>Why this matters for LLM agents</h2>
+            <ul>
+              <li><strong>Grounding:</strong> actions let the model gather missing information from tools or environments instead of relying only on parametric memory.</li>
+              <li><strong>State tracking:</strong> reasoning traces help maintain a plan across multiple steps and recover from unexpected observations.</li>
+              <li><strong>Agent design:</strong> the paper gives a simple conceptual blueprint for tool-using agents: reason, act, observe, revise.</li>
+              <li><strong>Connection to Teo Wiki:</strong> this is directly relevant to how an agent can maintain a public/private research wiki, browse sources, update pages, and verify results.</li>
+            </ul>
+          </section>
+
+          <section id="study-questions">
+            <h2>Study questions</h2>
+            <ol>
+              <li>When is it better to let the model act externally rather than reason longer internally?</li>
+              <li>How should an agent decide which observation is trustworthy enough to update its plan?</li>
+              <li>How does ReAct relate to current agent loops such as plan-act-observe, tool calling, and browser/terminal agents?</li>
+            </ol>
+          </section>
+
+          <footer class="category-footer">
+            Categories: LLM agents · ReAct · Reasoning · Tool use · Paper notes
+          </footer>
+        </article>
+      </main>
+    </div>
+
+    <script src="../../wiki.js"></script>
+  </body>
+</html>

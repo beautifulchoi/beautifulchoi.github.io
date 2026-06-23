@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chain-of-Thought Prompting | Teo Wiki</title>
+    <meta name="author" content="Yongjun Choi">
+    <meta name="description" content="A Teo Wiki study note on Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.">
+    <meta property="og:title" content="Chain-of-Thought Prompting | Teo Wiki">
+    <meta property="og:description" content="A concise study note on Chain-of-Thought prompting and why it matters for LLM reasoning.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/chain-of-thought-prompting/">
+    <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../wiki.css">
+  </head>
+  <body>
+    <header class="wiki-header">
+      <a class="brand" href="../../" aria-label="Teo Wiki home">
+        <span class="brand-title">Teo Wiki</span>
+        <span class="brand-label">PAPER NOTE</span>
+      </a>
+      <form class="ask-form" id="askForm" role="search">
+        <label class="sr-only" for="askInput">Search this note</label>
+        <input id="askInput" type="search" placeholder="Search this note" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <nav class="top-links" aria-label="External links">
+        <a href="../">References</a>
+        <a href="../../">Article</a>
+        <a href="../../research-map/">Research Map</a>
+        <a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">arXiv</a>
+      </nav>
+    </header>
+
+    <div class="wiki-shell">
+      <aside class="sidebar" aria-label="Paper navigation">
+        <p class="sidebar-kicker">Paper note</p>
+        <a href="#summary">Summary</a>
+        <a href="#metadata">Metadata</a>
+        <a href="#concept">Concept</a>
+        <a href="#why-important">Why important</a>
+        <a href="#study-questions">Study questions</a>
+      </aside>
+
+      <main class="page-main">
+        <div class="article-tabs" aria-label="Article actions">
+          <a href="../../">Article</a>
+          <a href="../">References</a>
+          <a class="active" href="#summary">Paper note</a>
+        </div>
+
+        <article class="article">
+          <h1 id="summary">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</h1>
+          <p class="subtitle">A foundational prompting paper: give the model examples with intermediate reasoning steps so it learns to produce step-by-step reasoning for hard tasks.</p>
+
+          <section id="metadata">
+            <h2>Metadata</h2>
+            <dl class="fact-list">
+              <dt>Paper</dt>
+              <dd><a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a></dd>
+              <dt>Authors</dt>
+              <dd>Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Brian Ichter, Fei Xia, Ed Chi, Quoc Le, Denny Zhou</dd>
+              <dt>arXiv</dt>
+              <dd>2201.11903 · first posted 2022-01-28</dd>
+              <dt>Topic</dt>
+              <dd>Prompting, reasoning, arithmetic reasoning, commonsense reasoning, symbolic reasoning</dd>
+            </dl>
+          </section>
+
+          <section id="concept">
+            <h2>Concept in one page</h2>
+            <div class="reference-list">
+              <article class="reference-card">
+                <span class="tag">Core idea</span>
+                <h3>Show the model the reasoning path, not only the answer</h3>
+                <p>Chain-of-Thought prompting provides few-shot examples where each answer includes intermediate reasoning steps. Large models can imitate this format and solve tasks that require multi-step reasoning more reliably.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Korean quick note</span>
+                <h3>정답 예시보다 “풀이 과정 예시”를 보여준다</h3>
+                <p>CoT의 핵심은 모델에게 단순히 입력→정답 쌍을 보여주는 게 아니라, 입력→중간 추론 과정→정답 형태를 보여주는 것이다. 그러면 큰 모델은 비슷한 방식으로 문제를 단계적으로 풀어내는 경향을 보인다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Scaling behavior</span>
+                <h3>Reasoning ability appears more clearly in sufficiently large models</h3>
+                <p>The paper emphasizes that CoT gains are strongest for large language models, suggesting that some reasoning behaviors become easier to elicit as model scale increases.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="why-important">
+            <h2>Why this matters for LLM agents</h2>
+            <ul>
+              <li><strong>Reasoning interface:</strong> CoT made reasoning traces a first-class prompting object, influencing later agent frameworks.</li>
+              <li><strong>Planning precursor:</strong> many agent loops rely on a model producing an explicit plan or rationale before actions.</li>
+              <li><strong>Evaluation caveat:</strong> a generated chain of thought can improve performance, but it is not automatically a faithful explanation of the model’s internal computation.</li>
+              <li><strong>Connection to ReAct:</strong> ReAct can be read as extending CoT by adding actions and observations between reasoning steps.</li>
+            </ul>
+          </section>
+
+          <section id="study-questions">
+            <h2>Study questions</h2>
+            <ol>
+              <li>Which tasks benefit from explicit reasoning traces, and which tasks do not?</li>
+              <li>When should an agent expose reasoning to users versus keep it as internal scratch work?</li>
+              <li>How does CoT relate to later methods such as self-consistency, tool use, ReAct, and inference-time scaling?</li>
+            </ol>
+          </section>
+
+          <footer class="category-footer">
+            Categories: Chain-of-Thought · Prompting · Reasoning · LLM agents · Paper notes
+          </footer>
+        </article>
+      </main>
+    </div>
+
+    <script src="../../wiki.js"></script>
+  </body>
+</html>

@@ -436,6 +436,37 @@ a:focus {
   font-size: .94em;
 }
 
+.fact-list {
+  display: grid;
+  grid-template-columns: minmax(110px, 22%) minmax(0, 1fr);
+  margin: 14px 0 20px;
+  border: 1px solid var(--soft-line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.fact-list dt,
+.fact-list dd {
+  margin: 0;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--soft-line);
+}
+
+.fact-list dt {
+  font-weight: 700;
+  background: #f8f9fa;
+}
+
+.fact-list dd {
+  min-width: 0;
+  background: #fff;
+}
+
+.fact-list dt:nth-last-of-type(1),
+.fact-list dd:nth-last-of-type(1) {
+  border-bottom: 0;
+}
+
 .tag {
   display: inline-block;
   margin-bottom: 8px;

@@ -36,6 +36,7 @@
       <aside class="sidebar" aria-label="References navigation">
         <p class="sidebar-kicker">References</p>
         <a href="#overview">Overview</a>
+        <a href="#llm-agent-techniques">LLM agent techniques</a>
         <a href="#automation">Automation</a>
       </aside>
 
@@ -52,6 +53,22 @@
 
           <p>This section collects useful public links that Teo wants to keep as durable, public-safe notes. Each reference gets its own page so the main Teo Wiki stays clean while the knowledge base can keep growing.</p>
 
+          <section id="llm-agent-techniques">
+            <h2>LLM agent techniques and prompting foundations</h2>
+            <div class="reference-list">
+              <article class="reference-card">
+                <span class="tag">Paper · ReAct · Tool-using agents</span>
+                <h3><a href="react-reasoning-acting/">ReAct: reasoning and acting in language models</a></h3>
+                <p>A study note on the ReAct pattern: interleaving reasoning traces with actions and observations so an LLM can plan, use tools, inspect the environment, and revise its next step.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Paper · Chain-of-Thought · Reasoning</span>
+                <h3><a href="chain-of-thought-prompting/">Chain-of-Thought prompting</a></h3>
+                <p>A study note on CoT prompting: showing intermediate reasoning examples so large language models learn to produce step-by-step reasoning for arithmetic, commonsense, and symbolic tasks.</p>
+              </article>
+            </div>
+          </section>
+
           <section id="automation">
             <h2>Automation and agent operations</h2>
             <div class="reference-list">
@@ -64,7 +81,7 @@
           </section>
 
           <footer class="category-footer">
-            Categories: References · Automation · Hermes · Multi-agent operations
+            Categories: References · LLM agents · Prompting · Automation · Hermes · Multi-agent operations
           </footer>
         </article>
       </main>
