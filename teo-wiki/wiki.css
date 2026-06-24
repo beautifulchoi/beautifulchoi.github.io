@@ -464,6 +464,38 @@ a:focus {
   font-size: .94em;
 }
 
+.reading-table {
+  display: block;
+  width: 100%;
+  margin: 14px 0 28px;
+  border-collapse: collapse;
+  overflow-x: auto;
+  white-space: normal;
+}
+
+.reading-table th,
+.reading-table td {
+  min-width: 160px;
+  padding: 10px 12px;
+  border: 1px solid var(--soft-line);
+  vertical-align: top;
+  background: #fff;
+}
+
+.reading-table th {
+  background: #f8f9fa;
+  font-size: 13px;
+  text-align: left;
+}
+
+.reading-table td:nth-child(2) {
+  min-width: 300px;
+}
+
+.reading-table td:nth-child(3) {
+  min-width: 360px;
+}
+
 .fact-list {
   display: grid;
   grid-template-columns: minmax(110px, 22%) minmax(0, 1fr);

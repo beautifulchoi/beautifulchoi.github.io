@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RL for LLMs Reading List | Teo Wiki</title>
+    <meta name="author" content="Yongjun Choi">
+    <meta name="description" content="A Teo Wiki reading sprint map for RL for LLMs papers: algorithms, reward modeling, RLHF, systems, and agent tasks.">
+    <meta property="og:title" content="RL for LLMs Reading List | Teo Wiki">
+    <meta property="og:description" content="A categorized study map of RL for LLMs papers, with motivations and core techniques.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/rl-for-llms-reading-list/">
+    <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../wiki.css">
+  </head>
+  <body>
+    <header class="wiki-header">
+      <a class="brand" href="../../" aria-label="Teo Wiki home">
+        <span class="brand-title">Teo Wiki</span>
+        <span class="brand-label">READING SPRINT</span>
+      </a>
+      <form class="ask-form" id="askForm" role="search">
+        <label class="sr-only" for="askInput">Search this reading list</label>
+        <input id="askInput" type="search" placeholder="Search this reading list" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <nav class="top-links" aria-label="External links">
+        <a href="../">References</a>
+        <a href="../../">Article</a>
+        <a href="../../research-map/">Research Map</a>
+        <a href="https://algoroxyolo.github.io/blog/2026/rl-reading-list/" target="_blank" rel="noopener">Source</a>
+      </nav>
+    </header>
+
+    <div class="wiki-shell">
+      <aside class="sidebar" aria-label="Reading list navigation">
+        <p class="sidebar-kicker">RL for LLMs</p>
+        <a href="#summary">Summary</a>
+        <a href="#why-rl">Why RL now?</a>
+        <a href="#technique-map">Technique map</a>
+        <a href="#reading-order">Reading order</a>
+        <a href="#paper-index">Paper index</a>
+      </aside>
+
+      <main class="page-main">
+        <div class="article-tabs" aria-label="Article actions">
+          <a href="../../">Article</a>
+          <a href="../">References</a>
+          <a class="active" href="#summary">Reading sprint</a>
+        </div>
+
+        <article class="article">
+          <h1 id="summary">RL for LLMs: reading sprint map</h1>
+          <p class="subtitle">A fast study map for the 96-paper RL-for-LLMs reading list: what each cluster is about, why the technique appeared, and what to focus on first.</p>
+
+          <section id="source">
+            <h2>Source</h2>
+            <p>This page summarizes <a href="https://algoroxyolo.github.io/blog/2026/rl-reading-list/" target="_blank" rel="noopener">RL for LLMs: The Reading List</a> by Yunze “Lorenzo” Xiao. The original list contains 96 papers across 5 categories and 24 sub-topics, with reading-depth recommendations.</p>
+            <div class="note collaborator-note">
+              <strong>How to use this page this week.</strong> Read by motivation first, not by chronology. For each section, ask: <em>what bottleneck did the technique try to remove?</em> Then read the A/A− papers in that cluster before skimming B/B+ papers for variations and failure modes.
+            </div>
+          </section>
+
+          <section id="why-rl">
+            <h2>Why RL for LLMs became important</h2>
+            <p>Supervised fine-tuning teaches a model to imitate demonstrations, but many modern LLM behaviors are not just imitation problems. Reasoning, tool use, long-horizon agents, coding, search, and preference-sensitive conversation require models to optimize outcomes that may only be visible after several steps. RL re-enters because it gives a language model an objective for <strong>trying, receiving feedback, and improving policies</strong> beyond static next-token imitation.</p>
+            <p>The reading list is best understood as a sequence of bottlenecks: stable policy optimization, better reward signals, preference learning, scalable systems, and finally task-specific agents.</p>
+          </section>
+
+          <section id="technique-map">
+            <h2>Technique map</h2>
+            <div class="category-grid">
+              <article class="category-card">
+                <span class="tag">01 · Algorithms</span>
+                <h3>PPO → GRPO → DAPO/CISPO/MaxRL</h3>
+                <p><strong>Motivation:</strong> LLM RL needs stable updates without destroying the base model. Long-CoT and verifiable tasks made old PPO recipes look expensive or brittle.</p>
+                <p><strong>Technique focus:</strong> clipping, KL/trust regions, critic-free or group baselines, pass@k objectives, length-bias fixes, scaling recipes.</p>
+              </article>
+              <article class="category-card">
+                <span class="tag">02 · Reward modeling</span>
+                <h3>Outcome rewards → generative/process/rubric rewards</h3>
+                <p><strong>Motivation:</strong> Many useful tasks are subjective, long-form, partially correct, or non-verifiable. A single scalar outcome reward is too weak.</p>
+                <p><strong>Technique focus:</strong> generative reward models, process reward models, rubrics-as-rewards, reward benchmarks, offline-online reward gaps.</p>
+              </article>
+              <article class="category-card">
+                <span class="tag">03 · Preference optimization</span>
+                <h3>RLHF → DPO/SimPO → online RLHF</h3>
+                <p><strong>Motivation:</strong> Human preference learning began with reward models + PPO, then moved toward simpler offline objectives, then came back to online RL when static pairs hit limits.</p>
+                <p><strong>Technique focus:</strong> preference datasets, DPO-style simplification, online iterative RLHF, personalized and multi-turn preferences.</p>
+              </article>
+              <article class="category-card">
+                <span class="tag">04 · Systems</span>
+                <h3>RL at scale needs deterministic, stable infrastructure</h3>
+                <p><strong>Motivation:</strong> RL amplifies small numerical and serving mismatches. Training and inference paths diverge; async rollout systems become stale; MoE routing can break reproducibility.</p>
+                <p><strong>Technique focus:</strong> sync/async RL, routing replay, FP32/FP16/FP8 consistency, deterministic inference, long-context rollout management.</p>
+              </article>
+              <article class="category-card">
+                <span class="tag">05 · Tasks and agents</span>
+                <h3>RL for tool use, coding, search, GUI, and general agents</h3>
+                <p><strong>Motivation:</strong> Agentic tasks are long-horizon and interactive. The model must choose actions, observe results, recover from failures, and handle sparse delayed reward.</p>
+                <p><strong>Technique focus:</strong> tool-use reward design, web/search agents, coding agents, GUI agents, agent PRMs, echo-trap failures, self-play/self-evolution.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="reading-order">
+            <h2>Suggested reading order for this week</h2>
+            <ol class="workflow-list">
+              <li><strong>Day 1 — Algorithm backbone:</strong> PPO → InstructGPT → DeepSeekMath/GRPO → DeepSeek-R1. Goal: understand why RL for reasoning needed stable policy optimization.</li>
+              <li><strong>Day 2 — Modern policy updates:</strong> DAPO, CISPO/MiniMax-M1, Dr. GRPO, MaxRL. Goal: understand what PPO/GRPO variants are trying to fix: length bias, clipping target, pass@k, and scaling.</li>
+              <li><strong>Day 3 — Reward modeling:</strong> Generative Verifiers, DeepSeek-GRM/SPCT, RM-R1, PAV/PRM, RaR. Goal: understand why reward is the real bottleneck.</li>
+              <li><strong>Day 4 — Preference and online RLHF:</strong> InstructGPT, HH-RLHF, DPO, Online Iterative RLHF, OLMo 3. Goal: understand the arc from RM+PPO to DPO simplification and back to online RL.</li>
+              <li><strong>Day 5 — Systems:</strong> AReaL/slime/Magistral plus determinism and mismatch papers. Goal: understand why RL quality depends on rollout/training infrastructure.</li>
+              <li><strong>Day 6 — Agents:</strong> Search-R1, ToolRL, ReTool, WebAgent-R1, RAGEN, Absolute Zero. Goal: connect RL to practical agents: search, tools, web, GUI, and self-evolution.</li>
+              <li><strong>Day 7 — Synthesis:</strong> write a short personal taxonomy: objective, reward, system, task, failure mode. Use this to decide which papers deserve individual Teo Wiki pages.</li>
+            </ol>
+          </section>
+
+          <section id="paper-index">
+            <h2>Paper index by category</h2>
+
+            <h3>Algorithms</h3>
+            <p class="section-note">Core question: how do we update an LLM policy stably and efficiently when feedback comes from rewards rather than demonstrations?</p>
+            <table class="reading-table">
+              <thead><tr><th>Sub-topic</th><th>Key papers</th><th>Technique / motivation</th></tr></thead>
+              <tbody>
+                <tr><td>Core RL</td><td><a href="https://arxiv.org/abs/1707.06347">PPO</a>; <a href="https://arxiv.org/abs/2203.02155">InstructGPT</a>; <a href="https://arxiv.org/abs/2402.14740">RLOO / Revisiting REINFORCE</a>; <a href="https://arxiv.org/abs/2402.03300">DeepSeekMath / GRPO</a>; <a href="https://arxiv.org/abs/2501.12948">DeepSeek-R1</a>; <a href="https://arxiv.org/abs/2503.14476">DAPO</a>; <a href="https://arxiv.org/abs/2506.13585">MiniMax-M1 / CISPO</a>; <a href="https://arxiv.org/abs/2602.02710">MaxRL</a></td><td>PPO gives trust-region-style stable updates; GRPO and later variants reduce critic/reward-shaping pain for reasoning RL; MaxRL reframes optimization around pass@k-style objectives.</td></tr>
+                <tr><td>Scaling laws</td><td><a href="https://arxiv.org/abs/2505.09388">Qwen3 Technical Report</a>; <a href="https://arxiv.org/abs/2510.13786">ScaleRL</a>; <a href="https://arxiv.org/abs/2509.25300">Scaling Behaviors</a>; <a href="https://arxiv.org/abs/2505.24864">ProRL</a>; <a href="https://arxiv.org/abs/2510.01180">BroRL</a></td><td>Once RL works, the next bottleneck is compute allocation: model scale, data, rollout count, training steps, and reasoning budget.</td></tr>
+                <tr><td>Cascade / stage-wise RL</td><td><a href="https://arxiv.org/abs/2505.16400">AceReason-Nemotron 1.1</a>; <a href="https://arxiv.org/abs/2512.13607">Nemotron-Cascade 1</a>; <a href="https://research.nvidia.com/labs/nemotron/files/NVIDIA-Nemotron-3-Super-Technical-Report.pdf">Nemotron 3 Super</a>; <a href="https://arxiv.org/abs/2603.19220">Nemotron-Cascade 2</a></td><td>Stage-wise recipes appear when one monolithic RL run is not enough; distillation, budget control, and multi-environment RL become part of the training curriculum.</td></tr>
+                <tr><td>Distillation</td><td><a href="https://thinkingmachines.ai/blog/on-policy-distillation/">On-Policy Distillation</a>; <a href="https://arxiv.org/abs/2601.02780">MiMo-V2-Flash</a>; <a href="https://arxiv.org/abs/2601.18734">Self-Distilled Reasoner</a>; <a href="https://arxiv.org/abs/2602.12275">On-Policy Context Distillation</a></td><td>RL can be expensive at inference or training time; distillation transfers on-policy behavior into cheaper or more controllable models.</td></tr>
+              </tbody>
+            </table>
+
+            <h3>Reward modeling</h3>
+            <p class="section-note">Core question: what reward signal is rich enough for reasoning, long-form answers, subjective preferences, and agent trajectories?</p>
+            <table class="reading-table">
+              <thead><tr><th>Sub-topic</th><th>Key papers</th><th>Technique / motivation</th></tr></thead>
+              <tbody>
+                <tr><td>Generative reward models</td><td><a href="https://arxiv.org/abs/2408.15240">Generative Verifiers</a>; <a href="https://arxiv.org/abs/2505.11475">HelpSteer3-Preference</a>; <a href="https://arxiv.org/abs/2504.02495">DeepSeek-GRM / SPCT</a>; <a href="https://arxiv.org/abs/2505.02387">RM-R1</a>; <a href="https://arxiv.org/abs/2602.12116">P-GenRM</a></td><td>Instead of a black-box scalar scorer, the reward model reasons or generates verification signals. This helps when reward itself requires reasoning.</td></tr>
+                <tr><td>Process reward models</td><td><a href="https://openreview.net/forum?id=A6Y7AqlzLW">PAV / Rewarding Progress</a>; <a href="https://arxiv.org/abs/2501.07301">Lessons of Developing PRMs</a>; <a href="https://arxiv.org/abs/2504.00125">ThinkPRM</a>; <a href="https://arxiv.org/abs/2504.15221">GenPRM</a>; <a href="https://arxiv.org/abs/2506.18896">ReasonFlux-PRM</a></td><td>Outcome reward is too sparse for long reasoning. PRMs supervise intermediate steps, making credit assignment more local.</td></tr>
+                <tr><td>Rubrics as rewards</td><td><a href="https://arxiv.org/abs/2503.11042">Rubrics as Rewards</a>; <a href="https://arxiv.org/abs/2504.00831">OpenRubrics</a>; <a href="https://arxiv.org/abs/2602.01454">Rubric-ARM</a>; <a href="https://arxiv.org/abs/2601.22975">Golden Goose</a></td><td>Subjective tasks need structured evaluation. Rubrics turn vague preferences into checkable dimensions.</td></tr>
+                <tr><td>Reward evaluation</td><td><a href="https://arxiv.org/abs/2410.14872">PPE / How to Evaluate RM</a>; <a href="https://arxiv.org/abs/2503.04378">HelpSteer3 dataset</a>; <a href="https://arxiv.org/abs/2506.01937">RewardBench 2</a>; <a href="https://arxiv.org/abs/2603.12963">Long-form RewardBench</a></td><td>Offline reward accuracy does not guarantee online RL improvement; evaluation must catch reward hacking and long-form failures.</td></tr>
+              </tbody>
+            </table>
+
+            <h3>RLHF and preference optimization</h3>
+            <p class="section-note">Core question: how do we convert human preferences into model behavior without overfitting static preference pairs?</p>
+            <table class="reading-table">
+              <thead><tr><th>Sub-topic</th><th>Key papers</th><th>Technique / motivation</th></tr></thead>
+              <tbody>
+                <tr><td>Foundations</td><td><a href="https://arxiv.org/abs/2203.02155">InstructGPT</a>; <a href="https://arxiv.org/abs/2204.05862">HH-RLHF</a>; <a href="https://arxiv.org/abs/2305.18290">DPO</a></td><td>The historical arc: train reward model + PPO, build helpful/harmless data, then simplify preference optimization with direct objectives.</td></tr>
+                <tr><td>Back to online RL</td><td><a href="https://arxiv.org/abs/2405.14734">SimPO</a>; <a href="https://arxiv.org/abs/2405.07863">Online Iterative RLHF</a>; <a href="https://openreview.net/forum?id=FhTAG591Ve">Asynchronous RLHF</a>; <a href="https://arxiv.org/abs/2512.13961">OLMo 3</a></td><td>Offline DPO-style objectives are convenient but static. Online RL reappears when the model must explore its own current distribution.</td></tr>
+                <tr><td>Multi-turn / personalized</td><td><a href="https://arxiv.org/abs/2511.02208">PPP</a>; <a href="https://arxiv.org/abs/2509.25137">RL from User Conversations</a>; <a href="https://arxiv.org/abs/2508.18642">RLMR</a>; <a href="https://arxiv.org/abs/2601.21459">HER</a>; <a href="https://arxiv.org/abs/2602.03109">OMAR</a>; <a href="https://arxiv.org/abs/2603.09249">Social-R1</a></td><td>Real assistants need personalized, social, creative, and role-playing behavior; reward must model user context, conversation history, and subjective constraints.</td></tr>
+              </tbody>
+            </table>
+
+            <h3>Systems</h3>
+            <p class="section-note">Core question: what infrastructure is needed so RL results are not artifacts of stale rollouts, nondeterminism, or train-inference mismatch?</p>
+            <table class="reading-table">
+              <thead><tr><th>Sub-topic</th><th>Key papers</th><th>Technique / motivation</th></tr></thead>
+              <tbody>
+                <tr><td>Sync vs async</td><td><a href="https://arxiv.org/abs/2506.10910">Magistral</a>; <a href="https://arxiv.org/abs/2505.24298">AReaL</a>; <a href="https://lmsys.org/blog/2025-07-09-slime/">slime</a>; <a href="https://arxiv.org/abs/2512.06547">A-3PO</a>; <a href="https://arxiv.org/abs/2601.12784">StaleFlow</a>; <a href="https://arxiv.org/abs/2603.01501">GAC</a></td><td>RL for LLMs needs fast rollout generation and policy updates. Async systems improve throughput but introduce stale data and off-policy drift.</td></tr>
+                <tr><td>Mismatch / determinism</td><td><a href="https://arxiv.org/abs/2512.01374">Stabilizing RL with LLMs</a>; <a href="https://arxiv.org/abs/2506.09501">Give Me FP32</a>; <a href="https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/">Defeating Nondeterminism</a>; <a href="https://lmsys.org/blog/2025-09-22-sglang-deterministic/">SGLang Deterministic Inference</a>; <a href="https://arxiv.org/abs/2510.11370">R3 Routing Replay</a>; <a href="https://arxiv.org/abs/2510.26788">FP16 Mismatch</a>; <a href="https://lmsys.org/blog/2025-11-25-fp8-rl/">Unified FP8</a></td><td>Small numerical differences can change rollouts and rewards. Deterministic inference and consistent precision/routing become RL correctness issues.</td></tr>
+                <tr><td>Long context</td><td><a href="https://arxiv.org/abs/2510.11967">Context-Folding</a>; <a href="https://arxiv.org/abs/2512.12967">QwenLong-L1.5</a></td><td>Long-horizon tasks exceed naive context windows. Context compression and folding are needed to keep agent memory usable during RL.</td></tr>
+              </tbody>
+            </table>
+
+            <h3>Tasks and agents</h3>
+            <p class="section-note">Core question: how does RL train agents that interact with external environments, tools, codebases, browsers, and users?</p>
+            <table class="reading-table">
+              <thead><tr><th>Sub-topic</th><th>Key papers</th><th>Technique / motivation</th></tr></thead>
+              <tbody>
+                <tr><td>Coding agents</td><td><a href="https://arxiv.org/abs/2603.00729">Qwen3-Coder-Next</a>; <a href="https://arxiv.org/abs/2602.03411">SWE-Master</a></td><td>Software tasks give relatively concrete rewards but require long-horizon planning, editing, testing, and error recovery.</td></tr>
+                <tr><td>Search / deep research</td><td><a href="https://arxiv.org/abs/2503.09516">Search-R1</a>; <a href="https://arxiv.org/abs/2510.24701">Tongyi DeepResearch</a>; <a href="https://arxiv.org/abs/2601.19578">Yunque DeepResearch</a>; <a href="https://arxiv.org/abs/2602.19526">How to Train DR Agent</a></td><td>Search agents need to decide when to query, read, synthesize, and stop. RL helps optimize multi-step information gathering.</td></tr>
+                <tr><td>GUI / computer use</td><td><a href="https://arxiv.org/abs/2601.20380">OmegaUse</a>; <a href="https://arxiv.org/abs/2602.22190">GUI-Libra</a>; <a href="https://arxiv.org/abs/2508.14040">ComputerRL</a></td><td>GUI agents operate in messy environments with delayed rewards and partial observability, making trajectory-level learning important.</td></tr>
+                <tr><td>Tool use</td><td><a href="https://arxiv.org/abs/2504.13958">ToolRL</a>; <a href="https://arxiv.org/abs/2505.00949">Nemotron-Tool-N1</a>; <a href="https://arxiv.org/abs/2504.09442">ReTool</a></td><td>Tool use needs reward design for choosing the right tool, formatting calls, using observations, and not over-calling tools.</td></tr>
+                <tr><td>Generalist agent RL</td><td><a href="https://arxiv.org/abs/2602.02488">RLAnything</a>; <a href="https://arxiv.org/abs/2510.04206">AGENTRL</a>; <a href="https://moonshotai.github.io/Kimi-K2.5/">Kimi K2.5 Agent Swarm</a>; <a href="https://arxiv.org/abs/2505.16421">WebAgent-R1</a>; <a href="https://arxiv.org/abs/2603.18815">ProRL Agent</a></td><td>Generalist agents require environment generation, cross-policy sampling, multi-agent orchestration, and rollout-as-a-service infrastructure.</td></tr>
+                <tr><td>Failures / self-evolution</td><td><a href="https://arxiv.org/abs/2504.20073">RAGEN</a>; <a href="https://arxiv.org/abs/2601.15839">iStar</a>; <a href="https://arxiv.org/abs/2502.10325">AgentPRM</a>; <a href="https://arxiv.org/abs/2505.03335">Absolute Zero</a></td><td>Agent RL can collapse into bad loops such as echo traps. New methods target credit assignment, actor-critic rollouts, and self-play/self-generated tasks.</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <footer class="category-footer">
+            Categories: RL for LLMs · Post-training · Reward modeling · RLHF · Agent RL · Systems
+          </footer>
+        </article>
+      </main>
+    </div>
+
+    <script src="../../wiki.js"></script>
+  </body>
+</html>
