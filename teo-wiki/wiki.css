@@ -496,6 +496,85 @@ a:focus {
   min-width: 360px;
 }
 
+.depth-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 16px;
+}
+
+.depth-legend span,
+.depth-group summary {
+  align-items: center;
+}
+
+.depth-legend > span {
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px 9px;
+  border: 1px solid var(--soft-line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.depth-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.1em;
+  padding: 1px 6px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.grade-a { background: #b42318; }
+.grade-am { background: #c2410c; }
+.grade-bp { background: #b7791f; }
+.grade-b { background: #2f6f4e; }
+.grade-c { background: #64748b; }
+.grade-nv { background: #111827; }
+
+.depth-group {
+  margin: 14px 0;
+  border: 1px solid var(--soft-line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.depth-group summary {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.depth-group[open] summary {
+  border-bottom: 1px solid var(--soft-line);
+  background: #f8f9fa;
+}
+
+.depth-table,
+.depth-policy-table {
+  margin: 0;
+}
+
+.depth-table td:first-child {
+  min-width: 260px;
+}
+
+.depth-table td:nth-child(2) {
+  min-width: 260px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .fact-list {
   display: grid;
   grid-template-columns: minmax(110px, 22%) minmax(0, 1fr);
