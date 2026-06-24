@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ReAct: Reasoning and Acting in Language Models | Teo Wiki</title>
     <meta name="author" content="Yongjun Choi">
-    <meta name="description" content="A Teo Wiki study note on ReAct: Synergizing Reasoning and Acting in Language Models.">
+    <meta name="description" content="A compressed Teo Wiki study note on ReAct: Synergizing Reasoning and Acting in Language Models.">
     <meta property="og:title" content="ReAct: Reasoning and Acting in Language Models | Teo Wiki">
-    <meta property="og:description" content="A concise study note on ReAct, the reasoning-plus-acting pattern for LLM agents.">
+    <meta property="og:description" content="Core motivation, pattern, implementation sketch, and limitations of ReAct for LLM agents.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/react-reasoning-acting/">
     <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
@@ -37,9 +37,11 @@
         <p class="sidebar-kicker">Paper note</p>
         <a href="#summary">Summary</a>
         <a href="#metadata">Metadata</a>
-        <a href="#concept">Concept</a>
-        <a href="#why-important">Why important</a>
-        <a href="#study-questions">Study questions</a>
+        <a href="#compressed-note">Compressed note</a>
+        <a href="#motivation">Motivation</a>
+        <a href="#pattern">Pattern</a>
+        <a href="#implementation">Implementation</a>
+        <a href="#limitations">Limitations</a>
       </aside>
 
       <main class="page-main">
@@ -51,7 +53,7 @@
 
         <article class="article">
           <h1 id="summary">ReAct: Synergizing Reasoning and Acting in Language Models</h1>
-          <p class="subtitle">A foundational agent-pattern paper: interleave reasoning traces with actions that query tools, environments, or external knowledge.</p>
+          <p class="subtitle">핵심: LLM이 생각만 하거나 행동만 하지 않고, 생각하고 → 행동하고 → 관찰하고 → 다시 생각하는 agent loop를 수행하게 만든다.</p>
 
           <section id="metadata">
             <h2>Metadata</h2>
@@ -59,58 +61,84 @@
               <dt>Paper</dt>
               <dd><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">ReAct: Synergizing Reasoning and Acting in Language Models</a></dd>
               <dt>Authors</dt>
-              <dd>Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao</dd>
+              <dd>Shunyu Yao et al.</dd>
               <dt>arXiv</dt>
-              <dd>2210.03629 · first posted 2022-10-06</dd>
+              <dd>2210.03629 · 2022</dd>
               <dt>Category</dt>
               <dd>Agent architectures · Reasoning-action loops and tool use</dd>
-              <dt>Topic</dt>
-              <dd>LLM agents, reasoning traces, tool/environment interaction, action planning</dd>
+              <dt>Keywords</dt>
+              <dd>ReAct, LLM agents, reasoning traces, action space, tool use, environment interaction</dd>
             </dl>
           </section>
 
-          <section id="concept">
-            <h2>Concept in one page</h2>
+          <section id="compressed-note">
+            <h2>Compressed note</h2>
             <div class="reference-list">
               <article class="reference-card">
-                <span class="tag">Core idea</span>
-                <h3>Reasoning and acting should be interleaved</h3>
-                <p>ReAct asks the model to alternate between internal reasoning steps and external actions. The model can think about what it knows, decide what to do next, call a tool or interact with an environment, observe the result, and then update its next reasoning step.</p>
+                <span class="tag">One-line summary</span>
+                <h3>CoT의 Thought 사이에 Action과 Observation을 넣는다</h3>
+                <p>ReAct는 <code>Thought → Action → Observation → Thought</code> 루프를 prompt trajectory로 만든다. 모델은 현재 상황을 해석하고, 행동을 고르고, 환경 결과를 다시 context로 받아 다음 reasoning에 반영한다.</p>
               </article>
               <article class="reference-card">
-                <span class="tag">Korean quick note</span>
-                <h3>생각만 하는 CoT에서, 행동하는 agent로 넘어가는 다리</h3>
-                <p>Chain-of-Thought가 “문제 풀이 과정을 말로 풀어내는 방식”이라면, ReAct는 거기에 <strong>Action</strong>을 붙인다. 즉, 모델이 추론하다가 검색, 도구 호출, 환경 조작 같은 행동을 하고, 관찰 결과를 다시 추론에 반영한다.</p>
+                <span class="tag">Why not CoT only?</span>
+                <h3>CoT는 reasoning하지만 grounded하지 않다</h3>
+                <p>CoT는 내부 지식으로만 추론하므로 사실 확인이 필요한 문제에서 hallucination이 생긴다. 검색, lookup, environment step 같은 외부 action이 필요하다.</p>
               </article>
               <article class="reference-card">
-                <span class="tag">Pattern</span>
-                <h3>Thought → Action → Observation → Thought</h3>
-                <p>The practical template is a loop: generate a thought, choose an action, receive an observation, then continue reasoning. This is close to how many modern tool-using agents are implemented.</p>
+                <span class="tag">Why not act-only?</span>
+                <h3>Act-only는 행동하지만 계획이 약하다</h3>
+                <p>바로 action만 생성하면 왜 그 행동을 하는지, 지금까지 무엇을 찾았는지, 다음 하위 목표가 무엇인지 추적하기 어렵다. Thought가 계획과 상태 추적을 담당한다.</p>
               </article>
             </div>
           </section>
 
-          <section id="why-important">
-            <h2>Why this matters for LLM agents</h2>
+          <section id="motivation">
+            <h2>Why this technique appeared</h2>
+            <p>기존 LLM 활용은 두 극단으로 나뉘었다. CoT는 단계별 reasoning을 잘 유도하지만 외부 세계를 확인하지 못한다. Act-only 방식은 Wikipedia, ALFWorld, WebShop 같은 환경에서 action은 할 수 있지만, 복잡한 task에서 계획과 상태 추적이 약했다.</p>
+            <p>ReAct는 이 둘을 결합해, 모델이 <strong>추론으로 다음 행동의 이유를 만들고, 행동으로 외부 정보를 얻고, 관찰로 추론을 갱신</strong>하게 한다.</p>
+          </section>
+
+          <section id="pattern">
+            <h2>Core pattern</h2>
+            <pre><code>Question
+→ Thought 1: what do I need next?
+→ Action 1: Search[...]
+→ Observation 1: result from environment
+→ Thought 2: update plan from observation
+→ Action 2: Lookup[...] or Finish[...]
+→ Observation 2
+→ Answer</code></pre>
             <ul>
-              <li><strong>Grounding:</strong> actions let the model gather missing information from tools or environments instead of relying only on parametric memory.</li>
-              <li><strong>State tracking:</strong> reasoning traces help maintain a plan across multiple steps and recover from unexpected observations.</li>
-              <li><strong>Agent design:</strong> the paper gives a simple conceptual blueprint for tool-using agents: reason, act, observe, revise.</li>
-              <li><strong>Connection to Teo Wiki:</strong> this is directly relevant to how an agent can maintain a public/private research wiki, browse sources, update pages, and verify results.</li>
+              <li><strong>Thought:</strong> 계획, 현재 상태 요약, 하위 목표 설정.</li>
+              <li><strong>Action:</strong> 환경이 받아들일 수 있는 문자열 명령. 예: <code>Search[entity]</code>, <code>Lookup[keyword]</code>, <code>Finish[answer]</code>.</li>
+              <li><strong>Observation:</strong> action 실행 결과를 다시 prompt history에 추가한 것.</li>
+              <li><strong>Trajectory:</strong> 지금까지의 Thought/Action/Observation 누적 기록.</li>
             </ul>
           </section>
 
-          <section id="study-questions">
-            <h2>Study questions</h2>
-            <ol>
-              <li>When is it better to let the model act externally rather than reason longer internally?</li>
-              <li>How should an agent decide which observation is trustworthy enough to update its plan?</li>
-              <li>How does ReAct relate to current agent loops such as plan-act-observe, tool calling, and browser/terminal agents?</li>
-            </ol>
+          <section id="implementation">
+            <h2>Implementation sketch</h2>
+            <pre><code>history = question
+
+while not done:
+    thought, action = llm(history)
+    observation = environment.step(action)
+    history += thought + action + observation</code></pre>
+            <p>논문 실험의 핵심은 새로운 neural architecture가 아니라, LLM 출력에서 action 문자열을 파싱하고, 환경에 실행하고, observation을 prompt에 다시 붙이는 harness다.</p>
+          </section>
+
+          <section id="limitations">
+            <h2>Limitations and why it still matters</h2>
+            <ul>
+              <li><strong>Format fragility:</strong> 문자열 action parsing에 의존하므로 모델이 형식을 어기면 깨질 수 있다.</li>
+              <li><strong>Context growth:</strong> trajectory가 길어질수록 prompt가 길어지고 노이즈가 누적된다.</li>
+              <li><strong>Observation quality:</strong> 잘못된 검색 결과나 환경 feedback을 그대로 믿으면 plan이 망가질 수 있다.</li>
+              <li><strong>Agent blueprint:</strong> 그럼에도 ReAct는 현대 tool-using agent의 기본 루프를 논문적으로 정식화했다.</li>
+            </ul>
           </section>
 
           <footer class="category-footer">
-            Categories: LLM agents · ReAct · Reasoning · Tool use · Paper notes
+            Categories: LLM agents · ReAct · Reasoning · Tool use · Agent architectures · Paper notes
           </footer>
         </article>
       </main>

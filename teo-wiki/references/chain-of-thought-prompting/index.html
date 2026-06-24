@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chain-of-Thought Prompting | Teo Wiki</title>
     <meta name="author" content="Yongjun Choi">
-    <meta name="description" content="A Teo Wiki study note on Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.">
+    <meta name="description" content="A compressed Teo Wiki study note on Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.">
     <meta property="og:title" content="Chain-of-Thought Prompting | Teo Wiki">
-    <meta property="og:description" content="A concise study note on Chain-of-Thought prompting and why it matters for LLM reasoning.">
+    <meta property="og:description" content="Core motivation, technique, observations, and agent connection for Chain-of-Thought prompting.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/chain-of-thought-prompting/">
     <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
@@ -37,9 +37,11 @@
         <p class="sidebar-kicker">Paper note</p>
         <a href="#summary">Summary</a>
         <a href="#metadata">Metadata</a>
-        <a href="#concept">Concept</a>
-        <a href="#why-important">Why important</a>
-        <a href="#study-questions">Study questions</a>
+        <a href="#compressed-note">Compressed note</a>
+        <a href="#motivation">Motivation</a>
+        <a href="#technique">Technique</a>
+        <a href="#findings">Findings</a>
+        <a href="#agent-link">Agent link</a>
       </aside>
 
       <main class="page-main">
@@ -51,7 +53,7 @@
 
         <article class="article">
           <h1 id="summary">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</h1>
-          <p class="subtitle">A foundational prompting paper: give the model examples with intermediate reasoning steps so it learns to produce step-by-step reasoning for hard tasks.</p>
+          <p class="subtitle">핵심: 모델 구조나 학습을 바꾸지 않고, few-shot 예시의 답변에 중간 추론 과정을 넣어 큰 LLM의 multi-step reasoning을 끌어낸다.</p>
 
           <section id="metadata">
             <h2>Metadata</h2>
@@ -59,58 +61,81 @@
               <dt>Paper</dt>
               <dd><a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a></dd>
               <dt>Authors</dt>
-              <dd>Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Brian Ichter, Fei Xia, Ed Chi, Quoc Le, Denny Zhou</dd>
-              <dt>arXiv</dt>
-              <dd>2201.11903 · first posted 2022-01-28</dd>
+              <dd>Jason Wei et al.</dd>
+              <dt>Venue</dt>
+              <dd>NeurIPS 2022</dd>
               <dt>Category</dt>
               <dd>LLM foundations · Prompting and reasoning basics</dd>
-              <dt>Topic</dt>
-              <dd>Prompting, reasoning, arithmetic reasoning, commonsense reasoning, symbolic reasoning</dd>
+              <dt>Keywords</dt>
+              <dd>Chain-of-Thought, few-shot prompting, reasoning, scratchpad, scaling</dd>
             </dl>
           </section>
 
-          <section id="concept">
-            <h2>Concept in one page</h2>
+          <section id="compressed-note">
+            <h2>Compressed note</h2>
             <div class="reference-list">
               <article class="reference-card">
-                <span class="tag">Core idea</span>
-                <h3>Show the model the reasoning path, not only the answer</h3>
-                <p>Chain-of-Thought prompting provides few-shot examples where each answer includes intermediate reasoning steps. Large models can imitate this format and solve tasks that require multi-step reasoning more reliably.</p>
+                <span class="tag">One-line summary</span>
+                <h3>정답만 보여주지 말고 풀이 과정을 보여줘라</h3>
+                <p>Standard prompting은 <code>Question → Answer</code> 예시를 준다. CoT prompting은 <code>Question → Intermediate reasoning steps → Answer</code> 예시를 주고, 모델이 test question에서도 답 전에 reasoning token을 생성하게 만든다.</p>
               </article>
               <article class="reference-card">
-                <span class="tag">Korean quick note</span>
-                <h3>정답 예시보다 “풀이 과정 예시”를 보여준다</h3>
-                <p>CoT의 핵심은 모델에게 단순히 입력→정답 쌍을 보여주는 게 아니라, 입력→중간 추론 과정→정답 형태를 보여주는 것이다. 그러면 큰 모델은 비슷한 방식으로 문제를 단계적으로 풀어내는 경향을 보인다.</p>
+                <span class="tag">Not architecture</span>
+                <h3>새로운 reasoning head가 아니다</h3>
+                <p>CoT는 Transformer 구조, LM head, loss를 바꾸지 않는다. 바뀌는 것은 출력 포맷이다. 모델이 최종 답변 전에 자연어/수식 형태의 중간 토큰을 생성하도록 prompt로 유도한다.</p>
               </article>
               <article class="reference-card">
-                <span class="tag">Scaling behavior</span>
-                <h3>Reasoning ability appears more clearly in sufficiently large models</h3>
-                <p>The paper emphasizes that CoT gains are strongest for large language models, suggesting that some reasoning behaviors become easier to elicit as model scale increases.</p>
+                <span class="tag">Mental model</span>
+                <h3>텍스트 기반 scratchpad</h3>
+                <p>LLM은 autoregressive model이라 앞에서 생성한 중간 계산 토큰을 다음 예측의 context로 다시 사용한다. 그래서 CoT는 사람이 종이에 중간 계산을 적는 것과 비슷한 역할을 한다.</p>
               </article>
             </div>
           </section>
 
-          <section id="why-important">
-            <h2>Why this matters for LLM agents</h2>
+          <section id="motivation">
+            <h2>Why this technique appeared</h2>
+            <p>큰 LM은 단순 QA, 번역, 분류에서는 few-shot prompting만으로 강했지만, 산술 word problem, 상식 추론, 날짜 계산, symbolic manipulation처럼 여러 단계를 거쳐야 하는 task에서는 바로 답을 내다가 자주 실패했다.</p>
+            <p>Fine-tuning으로 rationale을 학습시키는 방법도 있었지만, 고품질 rationale 데이터와 task별 학습이 필요했다. CoT는 이 문제를 <strong>학습 없이 prompt 예시의 형식만 바꾸는 방식</strong>으로 우회했다.</p>
+          </section>
+
+          <section id="technique">
+            <h2>Core technique</h2>
+            <pre><code>Standard few-shot:
+Q: ...
+A: The answer is 11.
+
+Chain-of-Thought few-shot:
+Q: ...
+A: Roger starts with 5 balls.
+   2 cans × 3 balls = 6 balls.
+   5 + 6 = 11.
+   The answer is 11.</code></pre>
             <ul>
-              <li><strong>Reasoning interface:</strong> CoT made reasoning traces a first-class prompting object, influencing later agent frameworks.</li>
-              <li><strong>Planning precursor:</strong> many agent loops rely on a model producing an explicit plan or rationale before actions.</li>
-              <li><strong>Evaluation caveat:</strong> a generated chain of thought can improve performance, but it is not automatically a faithful explanation of the model’s internal computation.</li>
-              <li><strong>Connection to ReAct:</strong> ReAct can be read as extending CoT by adding actions and observations between reasoning steps.</li>
+              <li><strong>Prompt-side change:</strong> few-shot answer에 reasoning trace를 포함한다.</li>
+              <li><strong>Inference-time effect:</strong> 모델이 답을 내기 전에 중간 추론 토큰을 생성한다.</li>
+              <li><strong>Key order:</strong> 답을 먼저 쓰고 설명을 붙이는 것보다, reasoning을 먼저 쓰는 순서가 중요하다.</li>
             </ul>
           </section>
 
-          <section id="study-questions">
-            <h2>Study questions</h2>
-            <ol>
-              <li>Which tasks benefit from explicit reasoning traces, and which tasks do not?</li>
-              <li>When should an agent expose reasoning to users versus keep it as internal scratch work?</li>
-              <li>How does CoT relate to later methods such as self-consistency, tool use, ReAct, and inference-time scaling?</li>
-            </ol>
+          <section id="findings">
+            <h2>Important findings</h2>
+            <ul>
+              <li><strong>Length alone is not enough:</strong> 의미 없는 긴 토큰을 추가하는 것만으로는 CoT만큼 좋아지지 않는다.</li>
+              <li><strong>Reasoning-before-answer matters:</strong> 답을 먼저 쓰고 뒤에 설명하는 방식은 효과가 약하다.</li>
+              <li><strong>Natural language helps:</strong> equation-only보다 자연어 CoT가 GSM8K 같은 문제에서 더 유리할 수 있다.</li>
+              <li><strong>Scale matters:</strong> 작은 모델보다 충분히 큰 모델에서 CoT 효과가 강하게 나타난다.</li>
+              <li><strong>Faithfulness caveat:</strong> 생성된 reasoning trace가 모델 내부 계산을 그대로 설명한다고 보장할 수는 없다.</li>
+            </ul>
+          </section>
+
+          <section id="agent-link">
+            <h2>Connection to agents</h2>
+            <p>CoT는 이후 agent 연구의 기본 인터페이스가 된다. CoT가 <code>Thought → Thought → Answer</code>라면, ReAct는 여기에 외부 행동과 관찰을 넣어 <code>Thought → Action → Observation → Thought</code>로 확장한다.</p>
+            <p>따라서 CoT는 단순 prompt engineering 논문이면서 동시에, LLM에게 test-time reasoning trace를 생성하게 만드는 출발점이다.</p>
           </section>
 
           <footer class="category-footer">
-            Categories: Chain-of-Thought · Prompting · Reasoning · LLM agents · Paper notes
+            Categories: Chain-of-Thought · Prompting · Reasoning · LLM foundations · Paper notes
           </footer>
         </article>
       </main>

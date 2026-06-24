@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>InstructGPT and RLHF | Teo Wiki</title>
+    <meta name="author" content="Yongjun Choi">
+    <meta name="description" content="A compressed Teo Wiki study note on InstructGPT and RLHF.">
+    <meta property="og:title" content="InstructGPT and RLHF | Teo Wiki">
+    <meta property="og:description" content="Core motivation, SFT-RM-PPO pipeline, and why InstructGPT matters for RLHF and LLM post-training.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/instructgpt-rlhf/">
+    <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../wiki.css">
+  </head>
+  <body>
+    <header class="wiki-header">
+      <a class="brand" href="../../" aria-label="Teo Wiki home">
+        <span class="brand-title">Teo Wiki</span>
+        <span class="brand-label">PAPER NOTE</span>
+      </a>
+      <form class="ask-form" id="askForm" role="search">
+        <label class="sr-only" for="askInput">Search this note</label>
+        <input id="askInput" type="search" placeholder="Search this note" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <nav class="top-links" aria-label="External links">
+        <a href="../">References</a>
+        <a href="../../">Article</a>
+        <a href="../../research-map/">Research Map</a>
+        <a href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener">arXiv</a>
+      </nav>
+    </header>
+
+    <div class="wiki-shell">
+      <aside class="sidebar" aria-label="Paper navigation">
+        <p class="sidebar-kicker">Paper note</p>
+        <a href="#summary">Summary</a>
+        <a href="#metadata">Metadata</a>
+        <a href="#compressed-note">Compressed note</a>
+        <a href="#motivation">Motivation</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#objective">Objective</a>
+        <a href="#takeaways">Takeaways</a>
+      </aside>
+
+      <main class="page-main">
+        <div class="article-tabs" aria-label="Article actions">
+          <a href="../../">Article</a>
+          <a href="../">References</a>
+          <a class="active" href="#summary">Paper note</a>
+        </div>
+
+        <article class="article">
+          <h1 id="summary">Training Language Models to Follow Instructions with Human Feedback</h1>
+          <p class="subtitle">핵심: GPT-3를 단순 next-token generator에서 instruction-following assistant로 바꾸기 위해 SFT → Reward Model → PPO/PPO-ptx RLHF 파이프라인을 제시한 논문.</p>
+
+          <section id="metadata">
+            <h2>Metadata</h2>
+            <dl class="fact-list">
+              <dt>Paper</dt>
+              <dd><a href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener">Training Language Models to Follow Instructions with Human Feedback</a></dd>
+              <dt>Authors</dt>
+              <dd>Long Ouyang et al.</dd>
+              <dt>arXiv</dt>
+              <dd>2203.02155 · 2022</dd>
+              <dt>Category</dt>
+              <dd>RL for LLMs / Post-training · RLHF and instruction tuning</dd>
+              <dt>Keywords</dt>
+              <dd>InstructGPT, RLHF, SFT, Reward Model, PPO, PPO-ptx, KL penalty, alignment</dd>
+            </dl>
+          </section>
+
+          <section id="compressed-note">
+            <h2>Compressed note</h2>
+            <div class="reference-list">
+              <article class="reference-card">
+                <span class="tag">One-line summary</span>
+                <h3>사람이 원하는 답변을 reward/objective로 바꾼다</h3>
+                <p>InstructGPT는 “helpful, honest, harmless한 assistant”라는 애매한 목표를 demonstration data, preference ranking, scalar reward model, PPO objective로 변환한 RLHF 파이프라인이다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Core pipeline</span>
+                <h3>SFT → RM → PPO/PPO-ptx</h3>
+                <p>사람이 쓴 좋은 답변으로 SFT를 하고, 사람이 선호한 답변 ranking으로 Reward Model을 학습한 뒤, RM 점수가 높은 답변을 더 자주 만들도록 PPO로 policy model을 업데이트한다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Key distinction</span>
+                <h3>Reward Model은 최종 대화 모델이 아니다</h3>
+                <p>RM은 prompt-response를 보고 scalar reward를 주는 채점 모델이다. 사용자와 대화하는 최종 모델은 RM이 아니라, RM reward를 기준으로 PPO/PPO-ptx 학습된 policy model이다.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="motivation">
+            <h2>Why this technique appeared</h2>
+            <p>GPT-3의 pretraining objective는 웹 텍스트의 다음 토큰을 맞히는 것이다. 하지만 사용자가 원하는 것은 다음 토큰 예측이 아니라, 지시를 이해하고 유용하고 사실적이며 위험하지 않은 답변을 하는 assistant다.</p>
+            <p>즉, <strong>pretraining objective와 실제 사용자 objective 사이의 mismatch</strong>가 있었다. InstructGPT는 이 mismatch를 사람의 demonstration과 preference feedback으로 줄이려 했다.</p>
+          </section>
+
+          <section id="pipeline">
+            <h2>Pipeline</h2>
+            <pre><code>Pretrained GPT-3
+  ↓
+SFT: human-written demonstrations
+  ↓
+Reward Model: human preference rankings → scalar reward
+  ↓
+PPO / PPO-ptx: optimize policy for RM score while staying near SFT
+  ↓
+InstructGPT</code></pre>
+            <ul>
+              <li><strong>SFT:</strong> 사람이 쓴 좋은 답변을 따라 하도록 supervised fine-tuning.</li>
+              <li><strong>RM:</strong> 같은 prompt에 대한 여러 답변 ranking을 pairwise comparison으로 바꾸고, winner가 loser보다 높은 reward를 받도록 학습.</li>
+              <li><strong>PPO:</strong> RM 점수를 높이도록 policy를 업데이트하되, 업데이트가 과격해지지 않게 제어.</li>
+              <li><strong>PPO-ptx:</strong> PPO에 pretraining objective를 섞어 기존 언어능력 저하를 줄인다.</li>
+            </ul>
+          </section>
+
+          <section id="objective">
+            <h2>Objective intuition</h2>
+            <p>RL 단계의 목표는 단순히 RM 점수만 높이는 것이 아니다. RM은 proxy이기 때문에 그대로 최적화하면 reward hacking이 생긴다. 그래서 InstructGPT는 세 가지 힘을 같이 둔다.</p>
+            <ol>
+              <li><strong>RM reward:</strong> 사람이 선호할 만한 답변을 만들수록 좋다.</li>
+              <li><strong>KL penalty:</strong> SFT model의 답변 분포에서 너무 멀어지지 마라.</li>
+              <li><strong>Pretraining mix:</strong> RLHF 중 원래 language modeling 능력을 잃지 마라.</li>
+            </ol>
+            <p>중요한 구분: InstructGPT objective는 “어떤 답변이 좋은가”를 정의하고, PPO clipped surrogate objective는 그 reward를 기준으로 policy를 안정적으로 업데이트하는 알고리즘이다.</p>
+          </section>
+
+          <section id="takeaways">
+            <h2>Takeaways</h2>
+            <ul>
+              <li><strong>Alignment as data transformation:</strong> 사람 선호 → ranking → pairwise comparison → reward model → RL objective.</li>
+              <li><strong>KL is a safety rail:</strong> RM 점수만 최적화하면 proxy exploit이 생기므로 SFT model 근처에 묶어둔다.</li>
+              <li><strong>PPO-ptx reduces alignment tax:</strong> instruction-following을 개선하면서 기존 NLP 능력 저하를 줄이려는 장치다.</li>
+              <li><strong>Position in the study map:</strong> CoT/ReAct는 inference-time prompting/agent protocol이고, InstructGPT는 model 자체를 human feedback으로 post-train하는 학습 파이프라인이다.</li>
+            </ul>
+          </section>
+
+          <footer class="category-footer">
+            Categories: InstructGPT · RLHF · SFT · Reward Model · PPO · Post-training · Paper notes
+          </footer>
+        </article>
+      </main>
+    </div>
+
+    <script src="../../wiki.js"></script>
+  </body>
+</html>
