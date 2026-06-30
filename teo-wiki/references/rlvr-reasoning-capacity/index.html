@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RLVR and Reasoning Capacity | Teo Wiki</title>
+    <meta name="author" content="Yongjun Choi">
+    <meta name="description" content="A compressed Teo Wiki study note on whether RLVR, PPO, and GRPO create new reasoning capacity beyond the base model, based on arXiv 2504.13837.">
+    <meta property="og:title" content="RLVR and Reasoning Capacity | Teo Wiki">
+    <meta property="og:description" content="Pass@1 vs pass@k, sampling efficiency, reasoning boundary, RLVR coverage loss, and distillation contrast.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/rlvr-reasoning-capacity/">
+    <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../wiki.css">
+  </head>
+  <body>
+    <header class="wiki-header">
+      <a class="brand" href="../../" aria-label="Teo Wiki home">
+        <span class="brand-title">Teo Wiki</span>
+        <span class="brand-label">RLVR NOTE</span>
+      </a>
+      <form class="ask-form" id="askForm" role="search">
+        <label class="sr-only" for="askInput">Search this note</label>
+        <input id="askInput" type="search" placeholder="Search this note" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <nav class="top-links" aria-label="External links">
+        <a href="../">References</a>
+        <a href="../../">Article</a>
+        <a href="../../research-map/">Research Map</a>
+        <a href="https://arxiv.org/abs/2504.13837" target="_blank" rel="noopener">arXiv</a>
+      </nav>
+    </header>
+
+    <div class="wiki-shell">
+      <aside class="sidebar" aria-label="RLVR note navigation">
+        <p class="sidebar-kicker">RLVR note</p>
+        <a href="#summary">Summary</a>
+        <a href="#metadata">Metadata</a>
+        <a href="#question">Core question</a>
+        <a href="#pass-k">pass@1 vs pass@k</a>
+        <a href="#observations">Key observations</a>
+        <a href="#mechanism">Mechanism</a>
+        <a href="#distillation">Distillation contrast</a>
+        <a href="#future">Future directions</a>
+        <a href="#reading-questions">Reading questions</a>
+      </aside>
+
+      <main class="page-main">
+        <div class="article-tabs" aria-label="Article actions">
+          <a href="../../">Article</a>
+          <a href="../">References</a>
+          <a class="active" href="#summary">RLVR note</a>
+        </div>
+
+        <article class="article">
+          <h1 id="summary">Does RL Really Incentivize Reasoning Capacity Beyond the Base Model?</h1>
+          <p class="subtitle">핵심: 현재 공개된 RLVR은 base model에 없던 reasoning boundary를 크게 확장한다기보다, base model이 이미 낮은 확률로 갖고 있던 정답 경로의 sampling efficiency를 높이는 효과에 가깝다는 주장이다.</p>
+
+          <section id="metadata">
+            <h2>Metadata</h2>
+            <dl class="fact-list">
+              <dt>Paper</dt>
+              <dd><a href="https://arxiv.org/abs/2504.13837" target="_blank" rel="noopener">Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?</a></dd>
+              <dt>Authors</dt>
+              <dd>Yang Yue, Zhiqi Chen, Rui Lu, Andrew Zhao, Zhaokai Wang, Yang Yue, Shiji Song, Gao Huang</dd>
+              <dt>arXiv</dt>
+              <dd>2504.13837 · 2025</dd>
+              <dt>Source material</dt>
+              <dd>Teo's uploaded Korean study note: <code>rlvr_reasoning_capacity_paper_summary.md</code></dd>
+              <dt>Category</dt>
+              <dd>RL for LLMs / Post-training · RLVR · Reasoning evaluation</dd>
+              <dt>Keywords</dt>
+              <dd>RLVR, GRPO, PPO, pass@1, pass@k, reasoning capacity, sampling efficiency, reasoning boundary, distillation, perplexity, coverage</dd>
+            </dl>
+          </section>
+
+          <section id="question">
+            <h2>Core question</h2>
+            <div class="reference-list">
+              <article class="reference-card">
+                <span class="tag">Claim under test</span>
+                <h3>Does RLVR create new reasoning ability?</h3>
+                <p>DeepSeek-R1 이후 RLVR이 모델을 스스로 탐색하게 만들어 base model에 없던 reasoning 능력을 획득하게 한다는 해석이 많아졌다. 이 논문은 그 해석이 맞는지 직접 묻는다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Paper's answer</span>
+                <h3>Mostly sampling efficiency, not necessarily boundary expansion</h3>
+                <p>논문의 핵심 주장은 RLVR이 “모델이 몰랐던 것을 새로 알게 만든다”기보다 “원래 가끔 맞추던 정답 경로를 더 자주 샘플링하게 만든다”에 가깝다는 것이다.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="pass-k">
+            <h2>pass@1 vs pass@k</h2>
+            <p>이 논문을 읽을 때 가장 중요한 구분은 <strong>한 번 뽑았을 때 맞추는 능력</strong>과 <strong>여러 번 뽑으면 적어도 한 번 맞출 수 있는 잠재 coverage</strong>다.</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Meaning</th>
+                  <th>Interpretation in this paper</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>pass@1</td>
+                  <td>한 번 샘플링해서 맞출 확률</td>
+                  <td>실사용 단일 응답 성능, sampling efficiency</td>
+                </tr>
+                <tr>
+                  <td>pass@k</td>
+                  <td>k개 샘플 중 하나라도 맞출 확률</td>
+                  <td>모델 분포 안에 정답 경로가 존재하는지 보는 reasoning boundary proxy</td>
+                </tr>
+              </tbody>
+            </table>
+            <pre><code>For independent samples with per-sample success probability p:
+pass@k = 1 - (1 - p)^k</code></pre>
+            <p>따라서 pass@1이 낮아도 pass@256이 높다면, 모델이 문제를 전혀 못 푸는 것이 아니라 정답 reasoning path의 확률이 낮을 뿐일 수 있다.</p>
+          </section>
+
+          <section id="observations">
+            <h2>Key observations</h2>
+            <ul>
+              <li><strong>RLVR improves pass@1:</strong> RLVR model은 보통 base model보다 한 번 답하게 했을 때 더 잘 맞춘다.</li>
+              <li><strong>Large-k can favor the base model:</strong> k를 크게 늘리면 base model이 RLVR model을 따라잡거나 추월하는 경우가 있다.</li>
+              <li><strong>Distribution sharpens:</strong> RLVR 이후 problem-level accuracy가 1.0에 가까운 문제는 늘지만, 중간 accuracy 문제는 줄고 0인 문제가 늘 수 있다.</li>
+              <li><strong>RL-only solved problems are rare:</strong> RL model만 새롭게 푼 문제는 적고, base model을 더 많이 샘플링하면 풀리는 경우가 많다.</li>
+              <li><strong>Base PPL on RL outputs is often low:</strong> RL model output이 base model 입장에서도 자연스러운 경우가 많아, base distribution 안의 path를 강화했다는 해석과 맞는다.</li>
+            </ul>
+          </section>
+
+          <section id="mechanism">
+            <h2>Why RLVR can be bounded by the base prior</h2>
+            <p>PPO, GRPO, DAPO, RLOO 같은 알고리즘은 세부 차이가 있지만, reasoning capacity 관점에서는 공통 구조를 가진다.</p>
+            <pre><code>sample responses from current/base-derived policy
+→ verify reward
+→ increase log-prob of high-reward responses
+→ decrease log-prob of low-reward responses</code></pre>
+            <p>핵심 한계는 단순하다.</p>
+            <div class="note boundary-note">
+              샘플링되지 않은 reasoning path는 reward를 받을 수 없다. Reward를 받지 못하면 gradient가 없다. Gradient가 없으면 그 path의 확률을 올릴 수 없다.
+            </div>
+            <p>LLM의 action space는 token sequence 전체라서 가능한 reasoning trace 공간이 지수적으로 크다. 그래서 현재 RLVR은 pretrained base model prior가 제공하는 “이미 어느 정도 샘플링 가능한” path에 강하게 의존한다.</p>
+          </section>
+
+          <section id="distillation">
+            <h2>Distillation contrast</h2>
+            <p>논문은 RLVR과 distillation을 구분한다. Distillation은 강한 teacher의 reasoning trace를 student에게 주입하므로, base model이 원래 잘 샘플링하지 못하던 reasoning pattern을 배울 가능성이 있다.</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Main effect</th>
+                  <th>Capacity interpretation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>RLVR</td>
+                  <td>Base prior 안의 high-reward path 확률 증가</td>
+                  <td>Sampling efficiency 개선에 가까움</td>
+                </tr>
+                <tr>
+                  <td>Distillation</td>
+                  <td>Teacher reasoning trace를 student에게 주입</td>
+                  <td>Reasoning boundary 확장 가능성</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section id="future">
+            <h2>Future directions suggested by the paper</h2>
+            <ul>
+              <li><strong>High-level abstraction search:</strong> token-level 탐색 대신 풀이 전략, program, proof structure, tool-use plan 같은 고수준 공간에서 탐색.</li>
+              <li><strong>Curriculum learning:</strong> reward가 거의 0인 어려운 문제로 바로 가기보다 쉬운 문제에서 non-zero reward를 확보하며 확장.</li>
+              <li><strong>Fine-grained credit assignment:</strong> outcome reward만 보지 않고 process reward, step verifier, proof checker, code trace feedback 사용.</li>
+              <li><strong>Multi-turn interaction:</strong> 한 번 답하고 끝나는 방식보다 test 실행, error 관찰, 수정, 재실행 같은 agentic loop로 더 풍부한 feedback 확보.</li>
+            </ul>
+          </section>
+
+          <section id="reading-questions">
+            <h2>Questions to ask when reading RLVR papers</h2>
+            <ol>
+              <li>pass@1만 보고 있는가, pass@k도 보고 있는가?</li>
+              <li>RL model이 푼 문제를 base model도 large-k sampling으로 풀 수 있는가?</li>
+              <li>RL-only로 새롭게 풀린 문제가 실제로 의미 있게 존재하는가?</li>
+              <li>RL output이 base model에게 낮은 perplexity를 갖는가?</li>
+              <li>Training이 진행될수록 coverage가 줄어들지는 않는가?</li>
+              <li>Reward는 outcome-level인가, process-level인가?</li>
+              <li>Exploration은 token-level인가, high-level plan/program-level인가?</li>
+              <li>Distillation, search, tool use, curriculum이 포함되어 있는가?</li>
+            </ol>
+            <p>Teo에게 남는 핵심 문장: <strong>RLVR improves sampling efficiency, not necessarily reasoning boundary.</strong></p>
+          </section>
+
+          <footer class="category-footer">
+            Categories: RLVR · GRPO · PPO · RL for LLMs · Reasoning capacity · pass@k · Post-training · Distillation
+          </footer>
+        </article>
+      </main>
+    </div>
+
+    <script src="../../wiki.js"></script>
+  </body>
+</html>
