@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DeepSeekMath, PPO, and GRPO | Teo Wiki</title>
+    <meta name="author" content="Yongjun Choi">
+    <meta name="description" content="A compressed Teo Wiki study note on DeepSeekMath, PPO, GRPO, reward/value/reference models, probability ratios, and clipped policy optimization for LLMs.">
+    <meta property="og:title" content="DeepSeekMath, PPO, and GRPO | Teo Wiki">
+    <meta property="og:description" content="How CoT/PoT SFT, PPO, GRPO, reward models, value models, reference models, and probability ratios fit together in LLM RL.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/deepseekmath-ppo-grpo/">
+    <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../wiki.css">
+  </head>
+  <body>
+    <header class="wiki-header">
+      <a class="brand" href="../../" aria-label="Teo Wiki home">
+        <span class="brand-title">Teo Wiki</span>
+        <span class="brand-label">RL NOTE</span>
+      </a>
+      <form class="ask-form" id="askForm" role="search">
+        <label class="sr-only" for="askInput">Search this note</label>
+        <input id="askInput" type="search" placeholder="Search this note" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <nav class="top-links" aria-label="External links">
+        <a href="../">References</a>
+        <a href="../../">Article</a>
+        <a href="../../research-map/">Research Map</a>
+        <a href="https://arxiv.org/abs/2402.03300" target="_blank" rel="noopener">arXiv</a>
+      </nav>
+    </header>
+
+    <div class="wiki-shell">
+      <aside class="sidebar" aria-label="RL note navigation">
+        <p class="sidebar-kicker">RL note</p>
+        <a href="#summary">Summary</a>
+        <a href="#metadata">Metadata</a>
+        <a href="#pipeline">DeepSeekMath pipeline</a>
+        <a href="#llm-rl-mapping">LLM RL mapping</a>
+        <a href="#models">Model roles</a>
+        <a href="#ppo-grpo">PPO vs GRPO</a>
+        <a href="#prob-ratio">Prob ratio</a>
+        <a href="#clipping">Clipping</a>
+        <a href="#toy-code">Toy code mapping</a>
+      </aside>
+
+      <main class="page-main">
+        <div class="article-tabs" aria-label="Article actions">
+          <a href="../../">Article</a>
+          <a href="../">References</a>
+          <a class="active" href="#summary">RL note</a>
+        </div>
+
+        <article class="article">
+          <h1 id="summary">DeepSeekMath, PPO, and GRPO</h1>
+          <p class="subtitle">핵심: PPO/GRPO는 좋은 답변 확률을 올리고 나쁜 답변 확률을 내리되, rollout을 만든 old policy에서 너무 멀어지지 않게 probability ratio와 clipping으로 제어한다.</p>
+
+          <section id="metadata">
+            <h2>Metadata</h2>
+            <dl class="fact-list">
+              <dt>Paper</dt>
+              <dd><a href="https://arxiv.org/abs/2402.03300" target="_blank" rel="noopener">DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models</a></dd>
+              <dt>Authors</dt>
+              <dd>Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Zhang, Mingchuan Zhang, Y. K. Li, Y. Wu, Daya Guo</dd>
+              <dt>arXiv</dt>
+              <dd>2402.03300 · 2024</dd>
+              <dt>Source material</dt>
+              <dd>Teo's uploaded Korean study note: <code>deepseekmath_ppo_grpo_notes.md</code></dd>
+              <dt>Category</dt>
+              <dd>RL for LLMs / Post-training · Mathematical reasoning · GRPO</dd>
+              <dt>Keywords</dt>
+              <dd>DeepSeekMath, CoT, PoT, PPO, GRPO, reward model, value model, reference model, old policy, probability ratio, clipping, KL penalty</dd>
+            </dl>
+          </section>
+
+          <section id="pipeline">
+            <h2>DeepSeekMath pipeline</h2>
+            <p>DeepSeekMath에서 <strong>CoT</strong>와 <strong>PoT</strong>는 새로운 RL 알고리즘이라기보다, SFT 단계에서 모델이 따라 배울 <strong>출력 형식</strong>에 가깝다.</p>
+            <pre><code>DeepSeek-Coder-Base-v1.5 7B
+→ math-heavy continual pretraining
+→ DeepSeekMath-Base 7B
+→ CoT / PoT / tool-integrated reasoning SFT
+→ DeepSeekMath-Instruct 7B
+→ GRPO reinforcement learning
+→ DeepSeekMath-RL 7B</code></pre>
+            <ul>
+              <li><strong>CoT:</strong> 자연어 단계별 풀이를 target sequence로 둔다.</li>
+              <li><strong>PoT:</strong> Python 등 프로그램 형태의 풀이를 target sequence로 둔다.</li>
+              <li><strong>Tool-integrated reasoning:</strong> 자연어 reasoning과 tool 실행을 섞은 풀이를 target으로 둔다.</li>
+            </ul>
+            <p>SFT objective는 여전히 next-token prediction이다. 즉 모델에게 “문제를 보면 이런 형식의 풀이 과정을 생성하라”를 imitation learning으로 가르친다.</p>
+          </section>
+
+          <section id="llm-rl-mapping">
+            <h2>LLM RL mapping</h2>
+            <div class="reference-list">
+              <article class="reference-card">
+                <span class="tag">State</span>
+                <h3>Prompt plus generated prefix</h3>
+                <p>LLM에서 state는 물리적 환경 상태가 아니라 <code>s_t = (x, y_&lt;t)</code>, 즉 문제 prompt와 지금까지 생성한 prefix다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Action</span>
+                <h3>Next token</h3>
+                <p>Action은 다음 token 선택이다. Policy model은 <code>πθ(y_t | x, y_&lt;t)</code> 확률분포를 출력한다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Reward / return</span>
+                <h3>Usually sequence-level and delayed</h3>
+                <p>수학 문제에서는 완성된 response 전체에 대해 정답 checker나 reward model이 점수를 주는 경우가 많다. 그래서 어떤 token이 최종 실패를 만들었는지 credit assignment가 어렵다.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="models">
+            <h2>Reward, value, and reference models</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Role</th>
+                  <th>LLM example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Policy model</td>
+                  <td>Generates the answer</td>
+                  <td>수학 문제 풀이를 작성하는 모델</td>
+                </tr>
+                <tr>
+                  <td>Reward model / reward function</td>
+                  <td>Scores a completed response</td>
+                  <td>정답이면 1, 틀리면 0; 또는 learned RM 점수</td>
+                </tr>
+                <tr>
+                  <td>Value model</td>
+                  <td>Predicts future reward from a prefix</td>
+                  <td>현재 풀이 prefix가 최종적으로 좋은 점수를 받을 가능성 예측</td>
+                </tr>
+                <tr>
+                  <td>Reference model</td>
+                  <td>Frozen anchor for KL penalty</td>
+                  <td>RL 중인 policy가 SFT 모델에서 너무 멀어지지 않게 잡아주는 기준</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>중요한 구분: <strong>GRPO가 없애는 것은 reward signal이 아니라 value model / critic</strong>이다. 수학에서는 neural reward model 대신 rule-based answer checker가 reward function 역할을 할 수 있다.</p>
+          </section>
+
+          <section id="ppo-grpo">
+            <h2>PPO vs GRPO</h2>
+            <p>PPO와 GRPO의 차이는 advantage를 어떻게 baseline과 비교하느냐에서 가장 잘 보인다.</p>
+            <div class="reference-list">
+              <article class="reference-card">
+                <span class="tag">PPO</span>
+                <h3>“이 token은 현재 prefix의 기대값보다 좋은가?”</h3>
+                <p>PPO는 <code>A_t = G_t - V(s_t)</code>를 사용한다. 현재 prefix의 기대 reward를 value model이 예측하고, 실제 return이 그 기대보다 좋으면 해당 token/action 확률을 올린다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">GRPO</span>
+                <h3>“이 response는 같은 prompt의 다른 response보다 좋은가?”</h3>
+                <p>GRPO는 같은 prompt에서 여러 response를 샘플링한 뒤, group reward의 mean/std로 상대 advantage를 만든다. Baseline이 value model이 아니라 group mean이므로 critic이 필요 없다.</p>
+              </article>
+            </div>
+            <pre><code>GRPO advantage for response i:
+A_i = (r_i - mean(r_1, ..., r_G)) / std(r_1, ..., r_G)</code></pre>
+            <p>따라서 PPO는 actor-critic에 가깝고, GRPO는 같은 문제에서 나온 여러 답변 간 상대 비교를 이용해 critic 없이 policy를 업데이트한다.</p>
+          </section>
+
+          <section id="prob-ratio">
+            <h2>Probability ratio: current / old</h2>
+            <p>PPO/GRPO objective의 ratio는 <strong>current policy probability / old policy probability</strong>다. Reference model이 분모가 아니다.</p>
+            <pre><code>r_t(θ) = π_current(a_t | s_t) / π_old(a_t | s_t)</code></pre>
+            <ul>
+              <li><strong>old policy:</strong> 이번 rollout batch를 실제로 생성한 policy snapshot. Ratio의 denominator다.</li>
+              <li><strong>current policy:</strong> 지금 optimizer step으로 업데이트되는 모델. Ratio의 numerator다.</li>
+              <li><strong>reference policy:</strong> RL 시작 전 SFT 모델. KL penalty의 기준이다.</li>
+            </ul>
+            <p>Rollout 직후에는 current와 old가 같아서 ratio가 1이다. 하지만 같은 rollout batch로 여러 optimizer step을 밟으면 current가 바뀌고 old는 고정되므로 ratio가 1에서 멀어진다.</p>
+            <p>Reference를 ratio 분모로 쓰면, RL이 진행되어 이미 SFT 모델보다 좋아진 policy는 새 batch 업데이트 전부터 ratio가 크게 튀어 clipping이 잘못 걸릴 수 있다. 그래서 <code>current / old</code>는 “이번 batch 기준 변화량”을 보고, <code>current vs reference</code>는 KL penalty로 따로 제어한다.</p>
+          </section>
+
+          <section id="clipping">
+            <h2>Clipped objective intuition</h2>
+            <pre><code>L_clip(θ) = E[min(r_t(θ) A_t,
+                  clip(r_t(θ), 1-ε, 1+ε) A_t)]</code></pre>
+            <ul>
+              <li><strong>Positive advantage:</strong> 좋은 token/response의 확률을 올린다. 단, old 대비 너무 많이 올리면 추가 이득을 막는다.</li>
+              <li><strong>Negative advantage:</strong> 나쁜 token/response의 확률을 내린다. 단, old 대비 너무 많이 내리면 추가 이득을 막는다.</li>
+              <li><strong>Why multiple steps:</strong> rollout 생성과 reward 채점은 비싸기 때문에 같은 batch를 여러 번 재사용한다. Ratio와 clipping은 이 재사용 중 policy drift를 제한한다.</li>
+            </ul>
+            <p>한 줄로 말하면, <strong>좋은 답변은 강화하고 나쁜 답변은 약화하되, 한 번 만든 rollout batch를 과하게 쥐어짜서 policy가 급격히 움직이는 것을 막는 장치</strong>다.</p>
+          </section>
+
+          <section id="toy-code">
+            <h2>Toy code mapping</h2>
+            <p>CartPole용 PPO/GRPO toy code를 볼 때는 DeepSeekMath의 LLM GRPO와 완전히 같다고 보기보다, 어떤 부품이 대응되는지 확인하는 학습 예제로 보면 좋다.</p>
+            <ul>
+              <li><strong>PPO toy code:</strong> <code>PolicyAndValueNetwork</code>가 actor와 critic을 함께 가진다. Trajectory에는 state, action, reward, value, old probability가 저장되고, advantage 계산에 value가 들어간다.</li>
+              <li><strong>GRPO-like toy code:</strong> value head 없이 <code>PolicyNetwork</code>만 둔다. Group return이나 group weight로 policy를 업데이트하는 구조를 통해 “critic 없이 상대 비교를 쓴다”는 직관을 보여준다.</li>
+              <li><strong>DeepSeekMath GRPO 핵심:</strong> 같은 math prompt에서 여러 response를 샘플링하고, reward의 group mean/std로 advantage를 만든다.</li>
+            </ul>
+          </section>
+
+          <footer class="category-footer">
+            Categories: DeepSeekMath · PPO · GRPO · RL for LLMs · Reward modeling · Post-training · Mathematical reasoning
+          </footer>
+        </article>
+      </main>
+    </div>
+
+    <script src="../../wiki.js"></script>
+  </body>
+</html>
