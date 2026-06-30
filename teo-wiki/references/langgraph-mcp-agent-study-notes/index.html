@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LangGraph + MCP Agent Study Notes | Teo Wiki</title>
+    <meta name="author" content="Yongjun Choi">
+    <meta name="description" content="A compressed Teo Wiki study note on building LangGraph ReAct agents with MCP tools, based on the braincrew-lab/langgraph-mcp-agents codebase.">
+    <meta property="og:title" content="LangGraph + MCP Agent Study Notes | Teo Wiki">
+    <meta property="og:description" content="How Streamlit, LangGraph, MCP, LLM wrappers, memory, and tool execution fit together in a practical agent runtime.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://beautifulchoi.github.io/teo-wiki/references/langgraph-mcp-agent-study-notes/">
+    <link rel="shortcut icon" href="../../../images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../wiki.css">
+  </head>
+  <body>
+    <header class="wiki-header">
+      <a class="brand" href="../../" aria-label="Teo Wiki home">
+        <span class="brand-title">Teo Wiki</span>
+        <span class="brand-label">AGENT NOTE</span>
+      </a>
+      <form class="ask-form" id="askForm" role="search">
+        <label class="sr-only" for="askInput">Search this note</label>
+        <input id="askInput" type="search" placeholder="Search this note" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <nav class="top-links" aria-label="External links">
+        <a href="../">References</a>
+        <a href="../../">Article</a>
+        <a href="../../research-map/">Research Map</a>
+        <a href="https://github.com/braincrew-lab/langgraph-mcp-agents" target="_blank" rel="noopener">Source repo</a>
+      </nav>
+    </header>
+
+    <div class="wiki-shell">
+      <aside class="sidebar" aria-label="Agent note navigation">
+        <p class="sidebar-kicker">Agent note</p>
+        <a href="#summary">Summary</a>
+        <a href="#metadata">Metadata</a>
+        <a href="#mental-model">Mental model</a>
+        <a href="#runtime-flow">Runtime flow</a>
+        <a href="#mcp-tools">MCP tools</a>
+        <a href="#react-agent">LangGraph ReAct</a>
+        <a href="#study-order">Study order</a>
+        <a href="#pitfalls">Pitfalls</a>
+      </aside>
+
+      <main class="page-main">
+        <div class="article-tabs" aria-label="Article actions">
+          <a href="../../">Article</a>
+          <a href="../">References</a>
+          <a class="active" href="#summary">Agent note</a>
+        </div>
+
+        <article class="article">
+          <h1 id="summary">LangGraph + MCP Agent Study Notes</h1>
+          <p class="subtitle">핵심: Claude/GPT를 단순 챗봇으로 쓰는 것이 아니라, LangGraph가 LLM-tool-LLM 루프를 실행하고 MCP server가 실제 외부 함수를 제공하는 agent runtime을 구성한다.</p>
+
+          <section id="metadata">
+            <h2>Metadata</h2>
+            <dl class="fact-list">
+              <dt>Source codebase</dt>
+              <dd><a href="https://github.com/braincrew-lab/langgraph-mcp-agents" target="_blank" rel="noopener">braincrew-lab/langgraph-mcp-agents</a></dd>
+              <dt>Source material</dt>
+              <dd>Teo's uploaded Korean study note: <code>langgraph_mcp_agent_study_notes.md</code></dd>
+              <dt>Category</dt>
+              <dd>Agent architectures · Agent operations · MCP tool use</dd>
+              <dt>Main files to study</dt>
+              <dd><code>app.py</code>, <code>mcp_server_time.py</code>, <code>mcp_server_rag.py</code>, <code>utils.py</code>, <code>config.json</code></dd>
+              <dt>Keywords</dt>
+              <dd>LangGraph, ReAct, MCP, Streamlit, MultiServerMCPClient, tool calling, RAG, MemorySaver, RunnableConfig</dd>
+            </dl>
+          </section>
+
+          <section id="mental-model">
+            <h2>Mental model</h2>
+            <div class="reference-list">
+              <article class="reference-card">
+                <span class="tag">One-line summary</span>
+                <h3>LLM is the controller; MCP tools are the action space</h3>
+                <p>이 프로젝트는 LLM을 답변 생성기만으로 쓰지 않는다. LLM은 어떤 tool을 어떤 인자로 호출할지 결정하고, LangGraph는 그 호출을 실행하며, MCP server는 실제 Python 함수나 외부 API 로직을 수행한다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Vision analogy</span>
+                <h3>Agent runtime은 inference orchestration 코드다</h3>
+                <p>Vision 코드에 비유하면 LLM은 backbone, MCP/RAG/API는 dataloader 또는 external input, LangGraph는 inference pipeline, MemorySaver와 <code>thread_id</code>는 checkpoint/memory 역할을 한다.</p>
+              </article>
+              <article class="reference-card">
+                <span class="tag">Key distinction</span>
+                <h3>MCP JSON은 tool 본체가 아니라 server 연결 설정이다</h3>
+                <p><code>config.json</code>이나 UI의 Tool JSON은 어떤 MCP server를 어떤 command 또는 URL로 연결할지 설명한다. 실제 tool은 MCP server 안의 <code>@mcp.tool()</code> 함수나 외부 MCP package가 제공한다.</p>
+              </article>
+            </div>
+          </section>
+
+          <section id="runtime-flow">
+            <h2>Runtime flow</h2>
+            <p><code>app.py</code>는 UI, config, MCP lifecycle, model selection, agent creation, streaming, memory thread를 한 파일에서 오케스트레이션한다. 학습할 때는 아래 흐름을 먼저 고정해두면 코드가 읽힌다.</p>
+            <pre><code>Streamlit UI
+→ load .env and config.json
+→ MultiServerMCPClient(mcp_config)
+→ await client.__aenter__()
+→ tools = client.get_tools()
+→ ChatAnthropic or ChatOpenAI
+→ create_react_agent(model, tools, prompt, MemorySaver)
+→ HumanMessage(user_query)
+→ LangGraph ReAct loop
+→ optional MCP tool call
+→ ToolMessage result
+→ final AIMessage answer</code></pre>
+            <p><strong>Add Tool</strong>과 <strong>Apply Settings</strong>는 다른 단계다. Add Tool은 JSON을 파싱해 pending config에 넣는 단계이고, Apply Settings를 눌러야 MCP client가 실제 server에 연결하고 tool schema를 읽어온다.</p>
+          </section>
+
+          <section id="mcp-tools">
+            <h2>MCP tool registration</h2>
+            <p>MCP server는 local stdio 프로세스일 수도 있고, 이미 떠 있는 remote/local SSE server일 수도 있다.</p>
+            <pre><code>{
+  "time": {
+    "command": "python",
+    "args": ["./mcp_server_time.py"],
+    "transport": "stdio"
+  },
+  "weather": {
+    "url": "http://localhost:8005/sse",
+    "transport": "sse"
+  }
+}</code></pre>
+            <ul>
+              <li><strong>stdio:</strong> <code>command + args</code>를 실행해 local MCP server 프로세스를 띄우고 표준입출력으로 MCP protocol을 주고받는다.</li>
+              <li><strong>sse:</strong> <code>url</code>에 접속해 HTTP/SSE 기반 MCP server와 통신한다.</li>
+              <li><strong>custom tool:</strong> 꼭 Python일 필요는 없지만, 직접 만들 경우에는 <code>FastMCP</code>와 <code>@mcp.tool()</code>로 함수를 노출하는 구조가 가장 단순하다.</li>
+              <li><strong>multiple tools:</strong> 파일 하나에 여러 <code>@mcp.tool()</code> 함수를 둘 수 있다. Tool 하나당 Python 파일 하나가 필요한 것은 아니다.</li>
+            </ul>
+          </section>
+
+          <section id="react-agent">
+            <h2>LangGraph ReAct agent</h2>
+            <p><code>create_react_agent()</code>는 LLM, tools, prompt, checkpointer를 묶어 ReAct graph를 만든다. 핵심은 LLM이 tool call을 제안하고, graph runtime이 tool을 실행한 뒤, 결과를 다시 LLM context로 넣는 것이다.</p>
+            <pre><code>agent = create_react_agent(
+    model,
+    tools,
+    checkpointer=MemorySaver(),
+    prompt=SYSTEM_PROMPT,
+)</code></pre>
+            <p>메시지 흐름은 아래처럼 분리해서 이해하면 좋다.</p>
+            <ul>
+              <li><strong>HumanMessage:</strong> 사용자 질문이 agent state에 들어간 형태.</li>
+              <li><strong>AIMessage / AIMessageChunk:</strong> LLM이 생성하는 답변 또는 streaming 조각. 필요하면 tool call을 포함한다.</li>
+              <li><strong>ToolMessage:</strong> MCP tool 실행 결과가 다시 agent state에 들어간 형태.</li>
+              <li><strong>RunnableConfig:</strong> <code>thread_id</code>와 <code>recursion_limit</code> 같은 실행 옵션을 전달한다.</li>
+            </ul>
+          </section>
+
+          <section id="study-order">
+            <h2>Recommended study order</h2>
+            <ol>
+              <li><strong><code>mcp_server_time.py</code>:</strong> 가장 작은 MCP server. <code>FastMCP</code>, <code>@mcp.tool()</code>, <code>mcp.run(transport="stdio")</code>를 확인한다.</li>
+              <li><strong><code>initialize_session()</code>:</strong> MCP tools, LLM wrapper, LangGraph agent가 합쳐지는 핵심 함수다.</li>
+              <li><strong><code>process_query()</code>:</strong> 사용자 입력이 <code>HumanMessage</code>로 graph에 들어가는 지점이다.</li>
+              <li><strong><code>get_streaming_callback()</code>:</strong> 최종 답변보다 중요한 debugging surface다. 어떤 tool을 어떤 argument로 불렀는지 확인한다.</li>
+              <li><strong><code>mcp_server_rag.py</code>:</strong> PDF → chunking → embedding → FAISS → retriever → MCP tool 구조를 본다.</li>
+            </ol>
+          </section>
+
+          <section id="pitfalls">
+            <h2>Practical pitfalls and improvements</h2>
+            <ul>
+              <li><strong><code>app.py</code>가 너무 많은 책임을 가짐:</strong> UI, auth, config, MCP lifecycle, model factory, streaming, history를 나누면 유지보수가 쉬워진다.</li>
+              <li><strong>Arbitrary command 입력은 위험함:</strong> 공개 서비스에서는 UI에서 임의 command JSON을 받지 말고 allowlist, secret manager, audit log가 필요하다.</li>
+              <li><strong>Tool description 품질이 중요함:</strong> 이름, docstring, argument schema가 약하면 LLM이 언제 tool을 써야 할지 모른다.</li>
+              <li><strong>RAG는 source metadata를 반환해야 함:</strong> prompt가 출처를 요구해도 retriever가 <code>source</code>, <code>page</code>를 반환하지 않으면 제대로 citation할 수 없다.</li>
+              <li><strong>Retriever cache 필요:</strong> 학습용 구현처럼 query마다 vectorstore를 다시 만들면 느리고 비싸다. Persistent index와 caching이 필요하다.</li>
+            </ul>
+            <p>가장 중요한 학습 포인트는 역할 분리다: <strong>LLM은 action selector, LangGraph는 action executor, MCP server는 function implementation</strong>이다.</p>
+          </section>
+
+          <footer class="category-footer">
+            Categories: LangGraph · MCP · ReAct agents · Tool use · RAG · Agent architectures · Agent operations
+          </footer>
+        </article>
+      </main>
+    </div>
+
+    <script src="../../wiki.js"></script>
+  </body>
+</html>
